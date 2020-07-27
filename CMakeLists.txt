@@ -15,6 +15,8 @@ add_executable(sorting-efficiency
 target_include_directories(sorting-efficiency PRIVATE
         ${CMAKE_CURRENT_SOURCE_DIR}/src)
 
+add_compile_options(-Wall -Wextra -Werror)
+
 if ("${CMAKE_BUILD_TYPE}" STREQUAL "Debug")
     # The additional / is important to remove the last character from the path.
     # Note that it does not matter if the OS uses / or \, because we are only
