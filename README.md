@@ -1,5 +1,9 @@
 # Sorting Efficiency
 
+This is to be the backbone of a "pre-scientific paper" (don't ask me, [ask these guys](https://www.bmbwf.gv.at/en.html)) titled "Efficiency of Sorting Algorithms".
+
+It is being written to answer the research question: "How does the theretical efficiency of selected sorting algorithms relate to the 'practical efficiency' of said algorithms?".
+
 ## Terminology
 
 - `sorter`: an implementation of a sorting algorithm which is to be benchmarked. Always a function with the signature `void(I first, I last, P cmp = P{})` where `I` models any iterator and `P` defaults to `std::less`.
@@ -14,6 +18,8 @@
 - `quick`
 - `heap`
 - `merge`
+
+These implementations _aren't_ excessively optimized for any metric. This means that there are certainly faster versions of these algorithms around. They do however rely strongly on the STL, which is (usually) heavily optimized and thoroughly tested, and which allows the implementations to be concise as well as easy to read and understand --- arguably one of the most important properties of an implementation.
 
 ### Sets
 
