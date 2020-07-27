@@ -29,12 +29,15 @@ These implementations _aren't_ excessively optimized for any metric. This means 
 
 ## Building
 
-Tested on Arch Linux with GCC 10.1.0 and CMake 3.17.3.
-
 - Make sure you have a C++17 conformant compiler and CMake installed.
 - Clone the repository.
 - Run `build.sh` in the root of the repository, a `build` folder will be created and populated.
 - `build` will now contain an executable `sorting`
+
+Tested on
+
+- Arch Linux with GCC 10.1.0 and CMake 3.17.3
+- Windows 10 (1903) with cl 19.22.27905 and CMake 3.16.5
 
 ## Testing
 
