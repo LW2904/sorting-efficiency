@@ -46,6 +46,8 @@ void quick(I first, I last, P cmp = P{}) {
 	quick(middle2, last, cmp);
 }
 
+// TODO: quick sort implementations with different pivot
+
 // TODO: bubble sort (p. 107)
 
 //
@@ -75,8 +77,8 @@ void merge(BI first, BI last, P cmp = P{}) {
 
         auto const middle = std::next(first, N / 2);
 
-        merge_sort(first, middle, cmp);
-        merge_sort(middle, last, cmp);
+        merge(first, middle, cmp);
+        merge(middle, last, cmp);
 
         std::inplace_merge(first, middle, last, cmp);
 }
