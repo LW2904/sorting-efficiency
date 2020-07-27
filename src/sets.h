@@ -2,19 +2,31 @@
 
 #include <vector>	// vector
 #include <cstddef>	// size_t
-#include <random>	// random_device, mt19937, uniform_int_distribution
+#include <random>	// iota (although it should be in <algorithm>)
+#include <algorithm>	// partial_sort, random_shuffle
 
 namespace sets {
 
-std::vector<int> random(const size_t size) {
-	std::random_device rd;
-	std::mt19937 gen(rd());
-	std::uniform_int_distribution<> dist(1, size);
-
+std::vector<int> sorted(const size_t size) {
 	auto set = std::vector<int>(size);
 
-	for (size_t s = 0; s < size; s++)
-		set.at(s) = dist(gen);
+	std::iota(set.begin(), set.end(), 1);
+
+	return set;
+}
+
+std::vector<int> random(const size_t size) {
+	auto set = sorted(size);
+
+	std::random_shuffle(set.begin(), set.end());
+
+	return set;
+}
+
+std::vector<int> partially_sorted(const size_t size) {
+	auto set = sorted(size);
+
+	std::random_shuffle(set.begin(), set.begin() + (size * 0.8));
 
 	return set;
 }
