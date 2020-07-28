@@ -2,15 +2,17 @@
 
 This is to be the backbone of a "pre-scientific paper" (don't ask me, [ask these guys](https://www.bmbwf.gv.at/en.html)) titled "Efficiency of Sorting Algorithms". It is being written to answer the research question: "How does the theretical efficiency of selected sorting algorithms relate to the 'practical efficiency' of said algorithms?".
 
+---
+
 This project implements:
 
-- An `experiment` class, which times an algorithm operating on a specific dataset.
-- A number of "sorters", i.e. implementations of sorting algorithms. Available are
+- An [`experiment` class](https://github.com/LW2904/sorting-efficiency/blob/master/src/experiment.h), which times an algorithm operating on a specific dataset.
+- A number of ["sorters"](https://github.com/LW2904/sorting-efficiency/blob/master/src/sorters.h), i.e. implementations of sorting algorithms. Available are
   - insertion sort
   - quick sort
   - heap sort
   - merge sort
-- Dataset generators, namely
+- [Dataset generators](https://github.com/LW2904/sorting-efficiency/blob/master/src/sets.h), namely
   - sorted
   - partially sorted
   - random
@@ -31,10 +33,10 @@ Datasets are of type `std::vector<int>`.
 
 ## Building
 
-- Make sure you have a C++17 conformant compiler and CMake installed.
-- Clone the repository.
-- Run `build.sh` in the root of the repository, a `build` folder will be created and populated.
-- `build` will now contain an executable `sorting`
+1. Make sure you have a C++17 conformant compiler and CMake installed.
+2. Clone the repository.
+3. Run `build.sh` in the root of the repository, a `build` folder will be created and populated.
+4. `build` will now contain an executable `sorting`
 
 Tested on
 
