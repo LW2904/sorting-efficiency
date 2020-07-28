@@ -8,6 +8,7 @@
 
 namespace sets {
 
+// Since std::random_shuffle is deprecated
 template<class I>
 static void random_shuffle(I first, I last) {
 	std::random_device rd;
@@ -27,7 +28,7 @@ std::vector<int> sorted(const size_t size) {
 std::vector<int> random(const size_t size) {
 	auto set = sorted(size);
 
-	random_shuffle(set.begin(), set.end());
+	sets::random_shuffle(set.begin(), set.end());
 
 	return set;
 }
@@ -38,7 +39,7 @@ std::vector<int> partially_sorted(const size_t size) {
 	std::random_device rd;
 	std::mt19937 g(rd());
 
-	random_shuffle(set.begin(), set.begin() + (size * 0.8));
+	sets::random_shuffle(set.begin(), set.begin() + (size * 0.8));
 
 	return set;
 }
