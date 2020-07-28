@@ -1,31 +1,33 @@
 # Sorting Efficiency
 
-This is to be the backbone of a "pre-scientific paper" (don't ask me, [ask these guys](https://www.bmbwf.gv.at/en.html)) titled "Efficiency of Sorting Algorithms".
+This is to be the backbone of a "pre-scientific paper" (don't ask me, [ask these guys](https://www.bmbwf.gv.at/en.html)) titled "Efficiency of Sorting Algorithms". It is being written to answer the research question: "How does the theretical efficiency of selected sorting algorithms relate to the 'practical efficiency' of said algorithms?".
 
-It is being written to answer the research question: "How does the theretical efficiency of selected sorting algorithms relate to the 'practical efficiency' of said algorithms?".
+This project implements:
 
-## Terminology
+- An `experiment` class, which times an algorithm operating on a specific dataset.
+- A number of "sorters", i.e. implementations of sorting algorithms. Available are
+  - insertion sort
+  - quick sort
+  - heap sort
+  - merge sort
+- Dataset generators, namely
+  - sorted
+  - partially sorted
+  - random
 
-- `sorter`: an implementation of a sorting algorithm which is to be benchmarked. Always a function with the signature `void(I first, I last, P cmp = P{})` where `I` models any iterator and `P` defaults to `std::less`.
+## Sorters
 
-- `set`: a dataset on which a `sorter` is to be benchmarked. Always of type `std::vector<int>`.
-
-## Contents
-
-### Sorters
-
-- `insertion`
-- `quick`
-- `heap`
-- `merge`
+Sorters are functions with the signature `void(I first, I last, P cmp = P{})` where `I` models a LegacyIterator and `P` models a Predicate (defaults to `std::less<>`).
 
 These implementations _aren't_ excessively optimized for any metric. This means that there are certainly faster versions of these algorithms around. They do however rely strongly on the STL, which is (usually) heavily optimized and thoroughly tested, and which allows the implementations to be concise as well as easy to read and understand --- arguably one of the most important properties of an implementation.
 
-### Sets
+## Sets
+
+Datasets are of type `std::vector<int>`.
 
 - `sorted`, initialized with `std::iota(..., 1)`
-- `random`, a `std::random_shuffle`d `sorted`
-- `partially_sorted`, 80% of `sorted` is randomly shuffled
+- `random`, a `std::shuffle`d `sorted`
+- `partially_sorted`, 80% of `sorted` is shuffled
 
 ## Building
 
@@ -38,7 +40,3 @@ Tested on
 
 - Arch Linux with GCC 10.1.0 and CMake 3.17.3
 - Windows 10 (1903) with cl 19.22.27905 and CMake 3.16.5
-
-## Testing
-
-TODO.
