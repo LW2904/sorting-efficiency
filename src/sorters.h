@@ -62,7 +62,6 @@ void heap(RI first, RI last, P cmp = P{}) {
     std::sort_heap(first, last, cmp);
 }
 
-
 // TODO: (straight) selection sort (p. 139)
 
 //
