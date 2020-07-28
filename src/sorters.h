@@ -1,12 +1,15 @@
 #pragma once
 
 #include <algorithm>    // min_element, iter_swap, upper_bound, rotate, partition, 
-                        // inplace_merge, make_heap, sort_heap, push_heap, pop_heap,
+                        // inplace_merge, make_heap, sort_heap,
                         // is_heap, is_sorted
 #include <functional>	// less
 #include <iterator>	// distance, begin, end, next
 
 namespace sorters {
+
+template <class I, class P = std::less<>>
+using sorter_t = std::function<void(I, I, P)>;
 
 //
 // Sorting by insertion

@@ -8,15 +8,19 @@
 
 namespace sets {
 
-std::vector<int> sorted(const size_t size) {
-	auto set = std::vector<int>(size);
+using set_t = std::vector<int>;
+// For convenience
+using iterator_t = set_t::iterator;
+
+set_t sorted(const size_t size) {
+	auto set = set_t(size);
 
 	std::iota(set.begin(), set.end(), 1);
 
 	return set;
 }
 
-std::vector<int> random(const size_t size) {
+set_t random(const size_t size) {
 	auto set = sorted(size);
 
 	utils::random_shuffle(set.begin(), set.end());
