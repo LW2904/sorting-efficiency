@@ -15,7 +15,7 @@ struct experiment {
 
 	algorithm_t algorithm;
 
-	experiment(std::vector<int> set, algorithm_t algorithm) : set(set),
+	experiment(set_t set, algorithm_t algorithm) : set(set),
 		algorithm(algorithm) {};
 
 	auto run() {
