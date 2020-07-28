@@ -2,8 +2,9 @@
 #include "sorters.h"
 #include "experiment.h"
 
-#include <map>
-#include <cstdio>
+#include <map>		// map
+#include <cstdio>	// printf
+#include <functional>	// bind
 
 int main() {
 	auto sorters = std::map<const char *, sorters::sorter_t<sets::iterator_t>>{
@@ -26,8 +27,9 @@ int main() {
 		printf("%s sort\n", sorter_name);
 
 		for (auto &[set_name, set] : sets) {
-			const auto time = experiment(set.begin(), set.end(), sorter)
-				.run();
+			const auto time = experiment(
+				std::bind(sorter, set.begin(), set.end(), std::less<>())
+			).run();
 
 			printf("\t%s set: %f s\n", set_name, time);
 		}

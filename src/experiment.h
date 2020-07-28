@@ -2,20 +2,16 @@
 #include <chrono>
 #include <functional>
 
-template<class I, class A>
+template<class A>
 struct experiment {
-	I first;
-	I last;
-
 	A algorithm;
 
-	experiment(I first, I last, A algorithm) : first(first),
-		last(last), algorithm(algorithm) { };
+	experiment(A algorithm) : algorithm(algorithm) { };
 
 	auto run() {
 		const auto start = std::chrono::steady_clock::now();
 
-		algorithm(first, last, std::less<>());
+		algorithm();
 
 		const auto end = std::chrono::steady_clock::now();
 
