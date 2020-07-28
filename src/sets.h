@@ -20,6 +20,14 @@ set_t sorted(const size_t size) {
 	return set;
 }
 
+set_t inverted(const size_t size) {
+	auto set = set_t(size);
+
+	std::iota(std::rbegin(set), std::rend(set), 1);
+
+	return set;
+}
+
 set_t random(const size_t size) {
 	auto set = sorted(size);
 
