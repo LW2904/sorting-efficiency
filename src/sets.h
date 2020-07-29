@@ -36,4 +36,13 @@ set_t random(const size_t size) {
 	return set;
 }
 
+set_t furrowed(const size_t size) {
+	auto set = set_t(size);
+
+	std::iota(std::rbegin(set) + (size / 2), std::rend(set), 1);
+	std::iota(set.begin() + (size / 2), set.end(), 1);
+
+	return set;
+}
+
 }
