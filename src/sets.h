@@ -36,11 +36,25 @@ set_t random(const size_t size) {
 	return set;
 }
 
-set_t furrowed(const size_t size) {
-	auto set = set_t(size);
+// TODO: This is experimental and designed to kill quicksort. It doesn't work, but I'm
+// keeping it here because the concept has some merit, it just needs to be improved.
+set_t anti_quick(const size_t size) {
+	auto set = sorted(size);
 
-	std::iota(std::rbegin(set) + (size / 2), std::rend(set), 1);
-	std::iota(set.begin() + (size / 2), set.end(), 1);
+	using I = iterator_t;
+	std::function<void(I, I)> insert = [&](I first, I last) {
+		const auto N = std::distance(first, last);
+
+		if (N <= 64)
+			return;
+
+		*std::next(first, N / 2) = 1;
+
+		insert(first, first + (N / 2));
+		insert(first + (N / 2) + 1, last);
+	};
+
+	insert(set.begin(), set.end());
 
 	return set;
 }
