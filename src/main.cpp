@@ -22,7 +22,6 @@ int main() {
 		{"sorted", 	sets::sorted(SET_SIZE)},
 		{"random", 	sets::random(SET_SIZE)},
 		{"inverted",	sets::inverted(SET_SIZE)},
-		{"furrowed", 	sets::furrowed(SET_SIZE)},
 	};
 
 	for (auto &[sorter_name, sorter] : sorters) {
