@@ -9,6 +9,16 @@ endif (NOT CMAKE_BUILD_TYPE)
 
 message(STATUS "Build type: ${CMAKE_BUILD_TYPE}")
 
+# Testing
+
+find_package(Catch2 REQUIRED)
+add_executable(tests tests/tests.cpp)
+target_link_libraries(tests Catch2::Catch2)
+
+include(CTest)
+include(Catch)
+catch_discover_tests(tests)
+
 add_executable(sorting-efficiency
     src/main.cpp)
 
