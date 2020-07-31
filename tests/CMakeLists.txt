@@ -1,0 +1,16 @@
+# This exclusively contains the catch2 main define, separated because precompiling
+# headers would be a problem otherwise.
+add_library(tests-main STATIC main.cpp)
+
+# This contains the actual tests.
+add_executable(tests-run tests.cpp)
+
+target_link_libraries(tests-run tests-main)
+
+target_compile_definitions(tests-run PRIVATE CATCH_CONFIG_FAST_COMPILE
+	CATCH_CONFIG_DISABLE_MATCHERS)
+
+# Important if you don't want the test compile to take >5s every time.
+target_precompile_headers(tests-run PRIVATE catch.h)
+
+add_custom_target(test "tests-run" "-d yes")

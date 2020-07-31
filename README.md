@@ -33,12 +33,20 @@ Datasets are of type `std::vector<int>`.
 
 ## Building
 
-1. Make sure you have a C++17 conformant compiler and CMake installed.
-2. Clone the repository.
-3. Run `build.sh` in the root of the repository, a `build` folder will be created and populated.
-4. `build` will now contain an executable `sorting`
+Make sure you have a C++17 conformant compiler and CMake installed.
 
-Tested on
+```
+git clone https://github.com/LW2904/sorting-efficiency.git
+mkdir build && cd build
+cmake ..
+make        # to build all targets
+make test   # to run unit tests
+```
+
+You will find an executable named `sorting` in the `build` folder.
+
+I've previously been able to compile and run on
 
 - Arch Linux with GCC 10.1.0 and CMake 3.17.3
 - Windows 10 (1903) with cl 19.22.27905 and CMake 3.16.5
+
