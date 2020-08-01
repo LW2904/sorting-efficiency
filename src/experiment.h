@@ -1,14 +1,15 @@
+#include <utility>
 #include <vector>
 #include <chrono>
 #include <functional>
 
-template<class A>
 struct experiment {
-	A algorithm;
+	std::function<void()> algorithm;
 
-	experiment(A algorithm) : algorithm(algorithm) { };
+	explicit experiment(std::function<void()> algorithm)
+	    : algorithm(std::move(algorithm)) { };
 
-	auto run() {
+	auto run() const {
 		const auto start = std::chrono::steady_clock::now();
 
 		algorithm();
