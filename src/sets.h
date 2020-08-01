@@ -36,8 +36,9 @@ set_t random(const size_t size) {
 	return set;
 }
 
-// TODO: This is experimental and designed to kill quicksort. It doesn't work, but I'm
-// keeping it here because the concept has some merit, it just needs to be improved.
+// TODO: This is experimental and designed to kill quicksort. It doesn't work,
+//       but I'm keeping it here because the concept has some merit, it just
+//       needs to be improved.
 set_t anti_quick(const size_t size) {
 	auto set = sorted(size);
 
