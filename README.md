@@ -4,18 +4,20 @@ This is to be the backbone of a "pre-scientific paper" (don't ask me, [ask these
 
 ---
 
-This project implements:
+This project implements
 
-- An [`experiment` class](https://github.com/LW2904/sorting-efficiency/blob/master/src/experiment.h), which times an algorithm operating on a specific dataset.
-- A number of ["sorters"](https://github.com/LW2904/sorting-efficiency/blob/master/src/sorters.h), i.e. implementations of sorting algorithms. Available are
+- an [`experiment` class](https://github.com/LW2904/sorting-efficiency/blob/master/src/experiment.h), which times an algorithm operating on a specific dataset.
+- a number of ["sorters"](https://github.com/LW2904/sorting-efficiency/blob/master/src/sorters.h), i.e. implementations of sorting algorithms. Available are
   - insertion sort
   - quick sort
   - heap sort
   - merge sort
-- [Dataset generators](https://github.com/LW2904/sorting-efficiency/blob/master/src/sets.h), namely
+- [dataset generators](https://github.com/LW2904/sorting-efficiency/blob/master/src/sets.h), namely
   - sorted
   - partially sorted
   - random
+
+including unit tests for each of the above.
 
 ## Sorters
 
