@@ -2,4 +2,4 @@ rm -rf build
 mkdir -p build
 cd build
 cmake ..
-make
+cmake --build . --target sorting-efficiency
