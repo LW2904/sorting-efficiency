@@ -1,4 +1,4 @@
-#include "catch.h"
+#include "deps/catch.h"
 
 #include <chrono>
 #include <thread>
