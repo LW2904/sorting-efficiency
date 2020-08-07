@@ -1,10 +1,10 @@
 #pragma once
 
+#include <iterator>	// distance, begin, end, next
 #include <algorithm>    // min_element, iter_swap, upper_bound, rotate, partition, 
                         // inplace_merge, make_heap, sort_heap,
                         // is_heap, is_sorted
 #include <functional>	// less
-#include <iterator>	// distance, begin, end, next
 
 namespace sorters {
 
