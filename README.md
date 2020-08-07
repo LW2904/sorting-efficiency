@@ -14,16 +14,52 @@ This project implements
   - merge sort
 - [dataset generators](https://github.com/LW2904/sorting-efficiency/blob/master/src/sets.h), namely
   - sorted
-  - partially sorted
+  - inverted
   - random
 
 including unit tests for each of the above.
 
+## Usage
+
+```
+Usage: sorting [options]
+Options:
+  -h, --help        Display this information and exit.
+  -o, --output      Sets the output path, relative to the current working directory.
+```
+
+The default (and currently _only_) behaviour is to generate files named `${sorter name}_${set name}` in the current working directory (you can change this with the `-o` option).
+
+```
+./build/sorting -o out
+tree out
+out
+├── heap_inverted
+├── heap_random
+├── heap_sorted
+├── insertion_inverted
+├── insertion_random
+...
+```
+
+These files contain numeric, tabular data in the format
+
+```
+cat out/heap_inverted
+4096 2927.75
+8192 5522.26
+12288 9303.89
+16384 13551.4
+...
+```
+
+where the first row is the number of items sorted, and the second row is the time in milliseconds it took the sorter to do so.
+
 ## Sorters
 
-Sorters are functions with the signature `void(I first, I last, P cmp = P{})` where `I` models a LegacyIterator and `P` models a Predicate (defaults to `std::less<>`).
+Sorters are functions with the signature `void(I first, I last, P cmp = P{})` where `I` models an Iterator and `P` models a Predicate (defaults to `std::less<>`).
 
-These implementations _aren't_ excessively optimized for any metric. This means that there are certainly faster versions of these algorithms around. They do however rely strongly on the STL, which is (usually) heavily optimized and thoroughly tested, and which allows the implementations to be concise as well as easy to read and understand --- arguably one of the most important properties of an implementation.
+These implementations _aren't_ excessively optimized for any metric. This means that there are certainly faster versions of these algorithms around. They do however rely strongly on the STL, which is (usually) heavily optimized and thoroughly tested, and which allows the implementations to be concise as well as easy to read and understand -- arguably one of the most important properties of an implementation.
 
 ## Sets
 
@@ -31,11 +67,11 @@ Datasets are of type `std::vector<int>`.
 
 - `sorted`, initialized with `std::iota(..., 1)`
 - `random`, a `std::shuffle`d `sorted`
-- `partially_sorted`, 80% of `sorted` is shuffled
+- `inverted`, an inverted version of `sorted`
 
 ## Building
 
-Make sure you have a C++17 conformant compiler and CMake installed.
+Make sure that you have a C++17 conformant compiler and CMake installed.
 
 ```
 git clone https://github.com/LW2904/sorting-efficiency.git
