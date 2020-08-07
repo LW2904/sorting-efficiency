@@ -46,6 +46,8 @@ namespace benchmark {
 		if (sub_path.size())
 			file_path += sub_path;
 
+		std::filesystem::create_directories(file_path);
+
 		file_path += algo_name;
 		file_path += "_";
 		file_path += set_name;
@@ -72,13 +74,13 @@ int main(int, char *argv[]) {
 	}
 
 	auto sorters = std::map<const char *, sorters::sorter_t<sets::iterator_t>>{
-		{"insertion", 	sorters::insertion<sets::iterator_t>},
 		{"quick", 	sorters::quick<sets::iterator_t>},
 		{"heap", 	sorters::heap<sets::iterator_t>},
 		{"merge", 	sorters::merge<sets::iterator_t>},
+		{"insertion", 	sorters::insertion<sets::iterator_t>},
 	};
 
-	constexpr size_t set_size = 512;
+	constexpr size_t set_size = 512 * 512;
 
 	auto sets = std::map<const char *, sets::set_t>{
 		{"sorted", 	sets::sorted(set_size)},
