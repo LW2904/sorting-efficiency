@@ -10,30 +10,66 @@
 #include <functional>	// bind
 #include <filesystem>
 
-void write_times(const char *sorter, const char *set, std::map<size_t, double> times) {
-	static auto cur_path = std::filesystem::current_path();
-	auto file_path = cur_path;
+namespace benchmark {
+	using timings_t = std::map<size_t, experiment::time_t>;
 
-	file_path += "/";
-	file_path += sorter;
-	file_path += "_";
-	file_path += set;
+	template<class A, class S>
+	timings_t run(A algorithm, S set) {
+		timings_t timings;
 
-	printf("\tfile_path: %s\n", file_path.c_str());
+		const size_t set_size = set.size();
+		const size_t chunk_size = set_size / 64;
 
-	if (std::filesystem::exists(file_path)) {
-		std::filesystem::remove(file_path);
+		for (size_t i = 0; i < set_size; i += chunk_size) {
+			// Important: We have to operate on a _copied subset_.
+			auto subset = S(set.begin(), set.begin() + i);
+			const auto time = experiment(std::bind(algorithm,
+				subset.begin(), subset.end(), std::less<>())
+			).run();
+
+			timings.emplace(i, time.count());
+		}
+
+		return timings;
 	}
 
-	std::ofstream os(file_path.c_str());
+	// TODO: A class inheriting from std::ofstream with an overloaded <<
+	// 	 operator would be significantly cleaner than this.
+	// TODO: const char * should be std::string.
+	void write(std::string sub_path, const char *algo_name, const char *set_name,
+		timings_t timings) {
+		static auto cur_path = std::filesystem::current_path();
+		auto file_path = cur_path;
 
-	for (const auto [n, t] : times) {
-		os << n << " " << t << "\n";
+		file_path += "/";
+
+		if (sub_path.size())
+			file_path += sub_path;
+
+		file_path += algo_name;
+		file_path += "_";
+		file_path += set_name;
+
+		printf("writing %s\n", file_path.c_str());
+
+		if (std::filesystem::exists(file_path)) {
+			std::filesystem::remove(file_path);
+		}
+
+		std::ofstream os(file_path.c_str());
+
+		for (const auto [n, t] : timings) {
+			os << n << " " << t << "\n";
+		}
 	}
 }
 
 int main(int, char *argv[]) {
 	config cfg{argv};
+
+	if (cfg.should_exit) {
+		return 1;
+	}
 
 	auto sorters = std::map<const char *, sorters::sorter_t<sets::iterator_t>>{
 		{"insertion", 	sorters::insertion<sets::iterator_t>},
@@ -42,42 +78,18 @@ int main(int, char *argv[]) {
 		{"merge", 	sorters::merge<sets::iterator_t>},
 	};
 
-	constexpr size_t SET_SIZE = 512;
-	constexpr size_t SET_CHUNKS = 128;
-	constexpr size_t SET_CHUNK_SIZE = SET_SIZE / SET_CHUNKS;
+	constexpr size_t set_size = 512;
 
-	// TODO: DRY, write a set builder or something -- no need to pass SET_SIZE
-	//	 to every single function.
 	auto sets = std::map<const char *, sets::set_t>{
-		{"sorted", 	sets::sorted(SET_SIZE)},
-		{"random", 	sets::random(SET_SIZE)},
-		{"inverted",	sets::inverted(SET_SIZE)},
+		{"sorted", 	sets::sorted(set_size)},
+		{"random", 	sets::random(set_size)},
+		{"inverted",	sets::inverted(set_size)},
 	};
 
-	if (cfg.output == config::output::human) {
-		printf("unsupported option\n");
-
-		return 1;
-	}
-
-	for (auto &[sorter_name, sorter] : sorters) {
-		printf("%s sort\n", sorter_name);
-
-		for (auto &[set_name, set] : sets) {
-			auto times = std::map<size_t, double>{};
-
-			for (size_t i = 0; i < SET_SIZE; i += SET_CHUNK_SIZE) {
-				const auto time = experiment(
-					std::bind(sorter,
-						set.begin(),
-						set.begin() + i, std::less<>()
-					)
-				).run();
-
-				times.emplace(i, time.count());
-			}
-
-			write_times(sorter_name, set_name, times);
+	for (auto [sorter_name, sorter] : sorters) {
+		for (auto [set_name, set] : sets) {
+			benchmark::write(cfg.output, sorter_name, set_name,
+				benchmark::run(sorter, set));
 		}
 	}
 

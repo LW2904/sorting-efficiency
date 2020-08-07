@@ -8,28 +8,35 @@ class config {
 "Usage: sorting [options]\n"
 "Options:\n"
 "  -h, --help        Display this information and exit.\n"
-"  -o, --output      Sets the output type, accepted values are 'human' and"
-"                    'gnuplot'."
+"  -s, --strategy    TODO\n"
+"  -o, --output      TODO\n"
 		);
 	}
 
 	void parse() {
 		if (cmd[{ "h", "help" }]) {
+			should_exit = true;
 			return print_help();
 		}
 
-		std::string _output;
-		cmd("output") >> _output;
-		if (_output == "human") {
-			output = output::human;
-		} else if (_output == "gnuplot") {
-			output = output::gnuplot;
+		std::string _strategy;
+		cmd("strategy") >> _strategy;
+		if (_strategy == "human") {
+			strategy = strategy::human;
+		} else if (_strategy == "gnuplot") {
+			strategy = strategy::gnuplot;
 		}
+
+		cmd("output") >> output;
 	}
 
 public:
-	enum class output { human, gnuplot };
-	output output = output::human;
+	enum class strategy { human, gnuplot };
+	strategy strategy = strategy::human;
+
+	std::string output = "out/";
+
+	bool should_exit = false;
 
 	config(char *argv[]) : cmd(argh::parser(argv)) {
 		parse();
