@@ -1,4 +1,4 @@
-load "scratch/common.gnu"
+load "plots/common.gnu"
 
 plot "out/insertion_sorted" with linespoints,\
 	"out/quick_sorted" with linespoints,\

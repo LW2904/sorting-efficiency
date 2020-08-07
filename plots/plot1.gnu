@@ -1,4 +1,4 @@
-load "scratch/common.gnu"
+load "plots/common.gnu"
 
 plot "out/insertion_inverted" with linespoints,\
 	"out/insertion_random" with linespoints,\
