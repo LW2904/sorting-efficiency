@@ -8,8 +8,9 @@ class config {
 "Usage: sorting [options]\n"
 "Options:\n"
 "  -h, --help        Display this information and exit.\n"
-"  -s, --strategy    TODO\n"
-"  -o, --output      TODO\n"
+"  -s, --strategy    Sets the benchmarking strategy. Valid parameters are \"human\"\n"
+"                    and \"gnuplot\". Currently, only the latter is supported.\n"
+"  -o, --output      Sets the output path if the strategy is set to \"gnuplot\".\n"
 		);
 	}
 
