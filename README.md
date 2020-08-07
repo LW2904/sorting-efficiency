@@ -2,7 +2,10 @@
 
 This is to be the backbone of a "pre-scientific paper" (don't ask me, [ask these guys](https://www.bmbwf.gv.at/en.html)) titled "Efficiency of Sorting Algorithms". It is being written to answer the research question: "How does the theretical efficiency of selected sorting algorithms relate to the 'practical efficiency' of said algorithms?".
 
-![alt-text-1](https://github.com/fs-c/sorting-efficiency/blob/master/assets/plot_ex1.png "title-1") ![alt-text-2](https://github.com/fs-c/sorting-efficiency/blob/master/assets/plot_ex2.png "title-2")
+<p float="middle">
+  <img src="https://github.com/fs-c/sorting-efficiency/blob/master/assets/plot_ex1.png" width="450" />
+  <img src="https://github.com/fs-c/sorting-efficiency/blob/master/assets/plot_ex2.png" width="450" /> 
+</p>
 
 ---
 
