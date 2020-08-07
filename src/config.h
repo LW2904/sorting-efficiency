@@ -8,7 +8,7 @@ class config {
 "Usage: sorting [options]\n"
 "Options:\n"
 "  -h, --help        Display this information and exit.\n"
-"  -o, --output      Sets the output path.\n"
+"  -o, --output      Sets the output path, relative to the current working directory.\n"
 		);
 	}
 
