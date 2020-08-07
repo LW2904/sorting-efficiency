@@ -4,6 +4,8 @@
 #include <functional>
 
 struct experiment {
+	using time_t = double;
+
 	std::function<void()> algorithm;
 
 	explicit experiment(std::function<void()> algorithm)
@@ -16,6 +18,6 @@ struct experiment {
 
 		const auto end = std::chrono::steady_clock::now();
 
-		return std::chrono::duration<double, std::micro>{ end - start };
+		return std::chrono::duration<time_t, std::micro>{ end - start };
 	}
 };
