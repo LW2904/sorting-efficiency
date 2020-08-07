@@ -30,7 +30,8 @@ including unit tests for each of the above.
 Usage: sorting [options]
 Options:
   -h, --help        Display this information and exit.
-  -o, --output      Sets the output path, relative to the current working directory.
+  -o, --output      Sets the output path. (default: ./out)
+  -s, --size        Sets the sample size. (default: 262144 i.e. 512^2)
 ```
 
 The default (and currently _only_) behaviour is to generate files named `${sorter name}_${set name}` in the current working directory (you can change this with the `-o` option).

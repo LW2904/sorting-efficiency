@@ -38,13 +38,12 @@ namespace benchmark {
 	// TODO: const char * should be std::string.
 	void write(std::string sub_path, const char *algo_name, const char *set_name,
 		timings_t timings) {
-		static auto cur_path = std::filesystem::current_path();
-		auto file_path = cur_path;
-
-		file_path += "/";
+		std::filesystem::path file_path;
 
 		if (sub_path.size())
 			file_path += sub_path;
+
+		file_path += "/";
 
 		std::filesystem::create_directories(file_path);
 
@@ -80,13 +79,15 @@ int main(int, char *argv[]) {
 		{"insertion", 	sorters::insertion<sets::iterator_t>},
 	};
 
-	constexpr size_t set_size = 512 * 512;
+	const size_t set_size = cfg.sample_size;
 
 	auto sets = std::map<const char *, sets::set_t>{
 		{"sorted", 	sets::sorted(set_size)},
 		{"random", 	sets::random(set_size)},
 		{"inverted",	sets::inverted(set_size)},
 	};
+
+	printf("sorting %d elements\n", set_size);
 
 	for (auto [sorter_name, sorter] : sorters) {
 		for (auto [set_name, set] : sets) {
