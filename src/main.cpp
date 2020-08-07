@@ -20,7 +20,7 @@ namespace benchmark {
 		const size_t set_size = set.size();
 		const size_t chunk_size = set_size / 64;
 
-		for (size_t i = 0; i < set_size; i += chunk_size) {
+		for (size_t i = chunk_size; i < set_size; i += chunk_size) {
 			// Important: We have to operate on a _copied subset_.
 			auto subset = S(set.begin(), set.begin() + i);
 			const auto time = experiment(std::bind(algorithm,
