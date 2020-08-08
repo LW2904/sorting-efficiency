@@ -59,7 +59,7 @@ cat data/heap_inverted
 ...
 ```
 
-where the first row is the number of items sorted, and the second row is the time in milliseconds it took the sorter to do so. These files can be loaded as-is into applications like [gnuplot](http://www.gnuplot.info/). The two graphs at the top of this file, for example, were generated using the gnuplot scripts in the `plots/` folder.
+where the first row is the number of items sorted, and the second row is the time in microseconds it took the sorter to do so. These files can be loaded as-is into applications like [gnuplot](http://www.gnuplot.info/). The two graphs at the top of this file, for example, were generated using the gnuplot scripts in the `plots/` folder.
 
 ### Benchmarking
 
