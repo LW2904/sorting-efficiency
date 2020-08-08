@@ -40,4 +40,4 @@ build
 cmake-build-debug
 
 # Benchmark results
-out
+data
