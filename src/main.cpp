@@ -4,6 +4,8 @@
 #include "experiment.h"
 
 #include <map>		// map
+#include <cmath>
+#include <cfenv>
 #include <cstdio>	// printf
 #include <fstream>
 #include <utility>	// pair
@@ -17,10 +19,17 @@ namespace benchmark {
 	timings_t run(A algorithm, S set) {
 		timings_t timings;
 
+		constexpr int total_chunks = 128;
 		const size_t set_size = set.size();
-		const size_t chunk_size = set_size / 64;
 
-		for (size_t i = chunk_size; i < set_size; i += chunk_size) {
+		std::fesetround(FE_TONEAREST);
+
+		const size_t chunk_size = set_size > total_chunks ?
+			std::nearbyint(set_size / total_chunks) : 1;
+
+		printf("set_size: %d, chunk_size: %d\n", set_size, chunk_size);
+
+		for (size_t i = chunk_size; i <= set_size; i += chunk_size) {
 			// Important: We have to operate on a _copied subset_.
 			auto subset = S(set.begin(), set.begin() + i);
 			const auto time = experiment(std::bind(algorithm,
