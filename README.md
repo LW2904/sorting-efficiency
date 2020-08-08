@@ -34,24 +34,24 @@ Options:
   -s, --size        Sets the sample size. (default: 262144 i.e. 512^2)
 ```
 
-The default (and currently _only_) behaviour is to generate files named `${sorter name}_${set name}` in the current working directory (you can change this with the `-o` option).
+The default (and currently _only_) behaviour is to generate files named `${sorter name}_${set name}` in the `./out/` directory (you can change this with the `-o` option).
 
 ```
-./build/sorting -o out
-tree out
-out
+./build/sorting -o data
+tree data
+data
 ├── heap_inverted
 ├── heap_random
 ├── heap_sorted
 ├── insertion_inverted
 ├── insertion_random
-...
+└── ...
 ```
 
 These files contain numeric, tabular data in the format
 
 ```
-cat out/heap_inverted
+cat data/heap_inverted
 4096 2927.75
 8192 5522.26
 12288 9303.89
@@ -59,7 +59,31 @@ cat out/heap_inverted
 ...
 ```
 
-where the first row is the number of items sorted, and the second row is the time in milliseconds it took the sorter to do so. These files can be loaded as-is into applications like [gnuplot](http://www.gnuplot.info/). The two graphs at the top of this file, for example, were generated using the gnuplot scripts in the `scratch/` folder.
+where the first row is the number of items sorted, and the second row is the time in milliseconds it took the sorter to do so. These files can be loaded as-is into applications like [gnuplot](http://www.gnuplot.info/). The two graphs at the top of this file, for example, were generated using the gnuplot scripts in the `plots/` folder.
+
+### Benchmarking
+
+A `benchmark.sh` script is provided, which generates the following structure,
+
+```
+data
+├── md
+│   ├── heap_inverted
+│   ├── heap_random
+│   ├── heap_sorted
+│   ├── insertion_inverted
+│   └── ...
+├── sm
+|   ├── heap_inverted
+│   └── ...
+└── xs
+    ├── heap_inverted
+    └── ...
+
+3 directories, 36 files
+```
+
+where `md` contains timings on a `2^18` sized, `sm` on a `2^8` and `xs` on a `2^4` sized dataset.
 
 ## Sorters
 
