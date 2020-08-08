@@ -5,3 +5,5 @@ set key left top
 set key box
 
 set size square
+
+set grid
