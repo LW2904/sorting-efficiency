@@ -32,6 +32,8 @@ Options:
   -h, --help        Display this information and exit.
   -o, --output      Sets the output path. (default: ./out)
   -s, --size        Sets the sample size. (default: 262144 i.e. 512^2)
+  -c, --chunks      Sets the number of chunks that the set will be devided into.
+                    (default: 128)
 ```
 
 The default (and currently _only_) behaviour is to generate files named `${sorter name}_${set name}` in the `./out/` directory (you can change this with the `-o` option).
@@ -59,7 +61,9 @@ cat data/heap_inverted
 ...
 ```
 
-where the first row is the number of items sorted, and the second row is the time in microseconds it took the sorter to do so. These files can be loaded as-is into applications like [gnuplot](http://www.gnuplot.info/). The two graphs at the top of this file, for example, were generated using the gnuplot scripts in the `plots/` folder.
+where the first row is the number of items sorted, and the second row is the time in microseconds it took the sorter to do so. By default, there are 128 chunks (columns), this can be changed with the `-c` option.
+
+These files can be loaded as-is into applications like [gnuplot](http://www.gnuplot.info/). The two graphs at the top of this file, for example, were generated using the gnuplot scripts in the `plots/` folder.
 
 ### Benchmarking
 

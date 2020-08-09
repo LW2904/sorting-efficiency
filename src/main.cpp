@@ -16,10 +16,9 @@ namespace benchmark {
 	using timings_t = std::map<size_t, experiment::time_t>;
 
 	template<class A, class S>
-	timings_t run(A algorithm, S set) {
+	timings_t run(A algorithm, S set, int total_chunks) {
 		timings_t timings;
 
-		constexpr int total_chunks = 128;
 		const size_t set_size = set.size();
 
 		std::fesetround(FE_TONEAREST);
@@ -101,7 +100,7 @@ int main(int, char *argv[]) {
 	for (auto [sorter_name, sorter] : sorters) {
 		for (auto [set_name, set] : sets) {
 			benchmark::write(cfg.output, sorter_name, set_name,
-				benchmark::run(sorter, set));
+				benchmark::run(sorter, set, cfg.total_chunks));
 		}
 	}
 

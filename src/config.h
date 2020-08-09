@@ -10,6 +10,8 @@ class config {
 "  -h, --help        Display this information and exit.\n"
 "  -o, --output      Sets the output path. (default: ./out)\n"
 "  -s, --size        Sets the sample size. (default: 262144 i.e. 512^2)\n"
+"  -c, --chunks      Sets the number of chunks that the set will be devided into.\n"
+"                    (default: 128)\n"
 		);
 	}
 
@@ -29,6 +31,7 @@ class config {
 public:
 	std::string output = "./out";
 	size_t sample_size = 512 * 512;
+	int total_chunks = 128;
 
 	bool should_exit = false;
 
