@@ -26,6 +26,8 @@ class config {
 		cmd({ "output", "o" }) >> output;
 
 		cmd({ "size", "s" }) >> sample_size;
+
+		cmd({ "chunks", "c" }) >> total_chunks;
 	}
 
 public:
