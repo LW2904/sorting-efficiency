@@ -9,7 +9,6 @@ class experiment {
 public:
 	using time_t = double;
 
-
 	explicit experiment(std::function<void()> algorithm)
 		: algorithm(std::move(algorithm)) { };
 
