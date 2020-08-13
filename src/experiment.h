@@ -3,13 +3,15 @@
 #include <chrono>
 #include <functional>
 
-struct experiment {
-	using time_t = double;
-
+class experiment {
 	std::function<void()> algorithm;
 
+public:
+	using time_t = double;
+
+
 	explicit experiment(std::function<void()> algorithm)
-	    : algorithm(std::move(algorithm)) { };
+		: algorithm(std::move(algorithm)) { };
 
 	auto run() const {
 		const auto start = std::chrono::steady_clock::now();
