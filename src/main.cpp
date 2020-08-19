@@ -12,11 +12,12 @@
 #include <functional>	// bind
 #include <filesystem>
 
+using algorithm_t = sorters::sorter_t<sets::iterator_t>;
+
 namespace benchmark {
 	using timings_t = std::map<size_t, experiment::time_t>;
 
-	template<class A, class S>
-	timings_t run(A algorithm, S set, int total_chunks) {
+	timings_t run(algorithm_t algorithm, sets::set_t set, int total_chunks) {
 		timings_t timings;
 
 		const size_t set_size = set.size();
@@ -30,7 +31,7 @@ namespace benchmark {
 
 		for (size_t i = chunk_size; i <= set_size; i += chunk_size) {
 			// Important: We have to operate on a _copied subset_.
-			auto subset = S(set.begin(), set.begin() + i);
+			auto subset = sets::set_t(set.begin(), set.begin() + i);
 			const auto time = experiment(std::bind(algorithm,
 				subset.begin(), subset.end(), std::less<>())
 			).run();
@@ -80,7 +81,7 @@ int main(int, char *argv[]) {
 		return 1;
 	}
 
-	auto sorters = std::map<const char *, sorters::sorter_t<sets::iterator_t>>{
+	auto sorters = std::map<const char *, algorithm_t>{
 		{"quick", 	sorters::quick<sets::iterator_t>},
 		{"heap", 	sorters::heap<sets::iterator_t>},
 		{"merge", 	sorters::merge<sets::iterator_t>},
