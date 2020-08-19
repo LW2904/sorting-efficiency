@@ -1,49 +1,128 @@
-The following three parts are fully generic:
+Large parts of the codebase (everything but `main.cpp`) are designed to be completely independent of each other. This is achieved through [templates](https://en.cppreference.com/w/cpp/language/templates) and [Named Requirements](https://en.cppreference.com/w/cpp/named_req) ([Container](https://en.cppreference.com/w/cpp/named_req/Container), [ForwardIterator](https://en.cppreference.com/w/cpp/named_req/ForwardIterator), ...) of templated variables. While these "Named Requirements" are _not enforced explicitly_ (although they might be [in the future](https://en.cppreference.com/w/cpp/language/constraints)), the following assumes that they are being followed.
 
-- the `experiment` class times a function of type `void()` using `std::chrono::steady_clock`, which is [the most suitable clock for measuring intervals](https://en.cppreference.com/w/cpp/chrono/steady_clock).
+## `experiment.h`
 
-- the `sets` namespace contains various set generators (sorted, inverted, random) which are functions of type `sets::set_t(const size_t)`. Currently, `sets::set_t` is defined to be `std::vector<int>` -- it could be redefined to any [Container](https://en.cppreference.com/w/cpp/named_req/Container) containing [LessThanComparable](https://en.cppreference.com/w/cpp/named_req/LessThanComparable) elements.
-
-- the `sorters` namespace contains implementations of various sorting algorithms (insertion, quick, heap, merge) which are functions of type `void(I begin, I end, P)` (aliased as `sorters::sorter_t`) where `I` is an iterator (at least [ForwardIterator](https://en.cppreference.com/w/cpp/named_req/ForwardIterator)) and `P` is a [BinaryPredicate](https://en.cppreference.com/w/cpp/named_req/BinaryPredicate) (it defaults to `std::less<>`).
-
-Tying them together is the `benchmark` namespace, which provides a `run` function that takes a function of type `sorters::sorter_t` and a container of type `sets::set_t`. It creates subsets of the given container with increasing size (i. e. sets containing [0, ..., 16], [0, ..., 32], [0, ..., 48], ... elements of the original container) and uses the `experiment` class to measure the execution time of the given algorithm with each subset.
-
-```C++
-const size_t chunk_size = set_size > total_chunks ?
-	std::nearbyint(set_size / total_chunks) : 1;
-
-for (size_t i = chunk_size; i <= set_size; i += chunk_size) {
-	// Important: We have to operate on a _copied subset_.
-	auto subset = S(set.begin(), set.begin() + i);
-	const auto time = experiment(std::bind(algorithm,
-		subset.begin(), subset.end(), std::less<>())
-	).run();
-
-	timings.emplace(i, time.count());
-}
-```
-
-It returns a Container of type `benchmark::timings_t` which can be written to a file using the `benchmark::write` function.
-
-The main function contains the following piece of code
-
-```C++
-auto sorters = std::map<const char *, sorters::sorter_t<sets::iterator_t>>{
-	{"quick", 	sorters::quick<sets::iterator_t>},
+```cpp
+class experiment {
 	// ...
-};
 
-auto sets = std::map<const char *, sets::set_t>{
-	{"sorted", 	sets::sorted(set_size)},
-	// ...
-};
+	using time_t = double;
 
-for (auto [sorter_name, sorter] : sorters) {
-	for (auto [set_name, set] : sets) {
-		benchmark::write(cfg.output, sorter_name, set_name,
-			benchmark::run(sorter, set, cfg.total_chunks));
+	explicit experiment(std::function<void()> algorithm);
+
+	auto run() const {
+		// Use std::chrono::steady_clock to time the algorithm
+
+		return std::chrono::duration<time_t, std::micro>{ end - start };
 	}
+};
+```
+
+The function `experiment::run` uses `std::chrono::steady_clock` to time the algorithm since it is [the most suitable clock for measuring intervals](https://en.cppreference.com/w/cpp/chrono/steady_clock).
+
+## `sets.h`
+
+```cpp
+namespace sets {
+	using set_t = std::vector<int>;
+	using iterator_t = set_t::iterator;
+
+	set_t sorted(const size_t size)                    { /* ... */ };
+	set_t inverted(const size_t size)                  { /* ... */ };
+	set_t random(const size_t size)	                   { /* ... */ };
+
+	// ...
 }
 ```
 
-which runs and writes a benchmark for each unique pair in `sorters X sets` (cartesian product).
+The [type alias](https://en.cppreference.com/w/cpp/language/type_alias) `sets::set_t` must be a [Container](https://en.cppreference.com/w/cpp/named_req/Container) (i.e. `std::vector`, `std::array`, ...) of elements which are [LessThanComparable](https://en.cppreference.com/w/cpp/named_req/LessThanComparable) (i.e. `int`, `double`, any type with an [overloaded `<` operator](https://en.cppreference.com/w/cpp/language/operators), ...).
+
+## `sorters.h`
+
+```cpp
+namespace sorters {
+	template <class I, class P = std::less<>>
+	using sorter_t = std::function<void(I, I, P)>;
+
+	template <class I, class P = std::less<>>
+	void insertion(I first, I last, P cmp = P{})       { /* ... */ };
+
+	template <class I, class P = std::less<>>
+	void quick(I first, I last, P cmp = P{})           { /* ... */ };
+
+	template<class RI, class P = std::less<>>
+	void heap(RI first, RI last, P cmp = P{})          { /* ... */ };
+
+	template <class BI, class P = std::less<>>
+	void merge(BI first, BI last, P cmp = P{})         { /* ... */ };
+}
+```
+
+_Reducing the obvious code duplication is a TODO._
+
+- `I` must at least be a [ForwardIterator](https://en.cppreference.com/w/cpp/named_req/ForwardIterator),
+- `RI` must be a [RandomAccessIterator](https://en.cppreference.com/w/cpp/named_req/RandomAccessIterator),
+- `BI` must be a [BidirectionalIterator](https://en.cppreference.com/w/cpp/named_req/BidirectionalIterator) and
+- `P` must be a [BinaryPredicate](https://en.cppreference.com/w/cpp/named_req/BinaryPredicate) or a [Compare](https://en.cppreference.com/w/cpp/named_req/Compare)
+
+## `benchmark`
+
+In `main.cpp`:
+
+```cpp
+using algorithm_t = sorters::sorter_t<sets::iterator_t>;
+
+namespace benchmark {
+	using timings_t = std::map<size_t, experiment::time_t>;
+
+	timings_t run(algorithm_t algorithm, sets::set_t set, int total_chunks) {
+		timings_t timings;
+		const size_t set_size = set.size();
+		const size_t chunk_size = /* calculate a good chunk size given
+		                             the number of chunks requested  */
+
+		for (size_t i = chunk_size; i <= set_size; i += chunk_size) {
+			// ...
+			const auto time = /* time the algorithm on a copy of the
+                                             set which ranges from [0, i] */
+
+			// `i` is the number of items sorted
+			timings.emplace(i, time.count());
+		}
+
+		return timings;
+	}
+
+	void write(std::string sub_path, const char *algo_name, const char *set_name,
+		timings_t timings) { /* ... */ }
+}
+```
+
+## `main`
+
+```cpp
+int main(int, char *argv[]) {
+	// ...
+
+	auto sorters = std::map<const char *, algorithm_t>{
+		{"quick", 	sorters::quick<sets::iterator_t>},
+		// ...
+	};
+
+	const size_t set_size = cfg.sample_size;
+
+	auto sets = std::map<const char *, sets::set_t>{
+		{"sorted", 	sets::sorted(set_size)},
+		// ...
+	};
+
+	for (auto [sorter_name, sorter] : sorters) {
+		for (auto [set_name, set] : sets) {
+			benchmark::write(cfg.output, sorter_name, set_name,
+				benchmark::run(sorter, set, cfg.total_chunks));
+		}
+	}
+
+	return 0;
+}
+```
