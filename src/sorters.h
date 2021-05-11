@@ -2,8 +2,8 @@
 
 #include <iterator>	// distance, begin, end, next
 #include <algorithm>    // min_element, iter_swap, upper_bound, rotate, partition, 
-                        // inplace_merge, make_heap, sort_heap,
-                        // is_heap, is_sorted
+			// inplace_merge, make_heap, sort_heap,
+			// is_heap, is_sorted
 #include <functional>	// less
 
 namespace sorters {
@@ -61,8 +61,8 @@ template<class RI, class P = std::less<>>
 void heap(RI first, RI last, P cmp = P{}) {
 	// TODO: Is this cheating?
 
-    std::make_heap(first, last, cmp);
-    std::sort_heap(first, last, cmp);
+	std::make_heap(first, last, cmp);
+	std::sort_heap(first, last, cmp);
 }
 
 // TODO: (straight) selection sort (p. 139)
@@ -73,16 +73,16 @@ void heap(RI first, RI last, P cmp = P{}) {
 
 template <class BI, class P = std::less<>>
 void merge(BI first, BI last, P cmp = P{}) {
-        auto const N = std::distance(first, last);
-        if (N <= 1)
-                return;
+	auto const N = std::distance(first, last);
+	if (N <= 1)
+		return;
 
-        auto const middle = std::next(first, N / 2);
+	auto const middle = std::next(first, N / 2);
 
-        merge(first, middle, cmp);
-        merge(middle, last, cmp);
+	merge(first, middle, cmp);
+	merge(middle, last, cmp);
 
-        std::inplace_merge(first, middle, last, cmp);
+	std::inplace_merge(first, middle, last, cmp);
 }
 
 }
