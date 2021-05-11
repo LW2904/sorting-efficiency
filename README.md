@@ -109,16 +109,18 @@ Make sure that you have a C++17 conformant compiler and CMake installed.
 
 ```
 git clone https://github.com/LW2904/sorting-efficiency.git
+# the folder name is merely a suggestion
 mkdir build && cd build
 cmake ..
-make        # to build all targets
-make test   # to run unit tests
+# to build all targets
+make
+# to run unit tests
+make test
 ```
 
 You will find an executable named `sorting` in the `build` folder.
 
 I've previously been able to compile and run on
 
-- Arch Linux with GCC 10.1.0 and CMake 3.17.3
+- Arch Linux and Ubuntu with GCC 10.1.0 and CMake 3.17.3
 - Windows 10 (1903) with cl 19.22.27905 and CMake 3.16.5
-
