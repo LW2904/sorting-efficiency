@@ -1,0 +1,21 @@
+name: Build
+
+on: push
+
+jobs:
+  build:
+    strategy:
+      matrix:
+        os: [windows-latest, ubuntu-latest]
+
+    runs-on: ${{ matrix.os }}
+
+    steps:
+      - name: Build executable
+        uses: ./.github/actions/build
+      
+      - name: Upload built executable
+        uses: actions/upload-artifact@v2
+        with:
+          name: build-${{matrix.os}}
+          path: build

@@ -35,8 +35,8 @@
 .vscode
 .idea
 
-# CMake build folder
-build
+# Default CMake build folder
+/build
 cmake-build-debug
 
 # Benchmark results
