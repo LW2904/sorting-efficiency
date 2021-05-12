@@ -10,3 +10,4 @@ runs:
         cmake ..
         make
         make test
+      shell: bash
