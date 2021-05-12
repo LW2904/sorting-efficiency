@@ -8,6 +8,8 @@ runs:
     - run: |
         mkdir build && cd build
         cmake ..
+        ll
+        ll ..
         make
         make test
       shell: bash
