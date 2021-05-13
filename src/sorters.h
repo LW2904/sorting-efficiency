@@ -15,6 +15,7 @@ using sorter_t = std::function<void(I, I, P)>;
 // Sorting by insertion
 //
 
+// Best: O(n), worst: O(n^2)
 template <class I, class P = std::less<>>
 void insertion(I first, I last, P cmp = P{}) {
 	// TODO: Early test for containers with size < 2.
@@ -31,6 +32,7 @@ void insertion(I first, I last, P cmp = P{}) {
 // Sorting by exchanging
 //
 
+// Best: O(n log n), Worst: O(n^2)
 template <class I, class P = std::less<>>
 void quick(I first, I last, P cmp = P{}) {
 	auto const N = std::distance(first, last);
@@ -57,6 +59,7 @@ void quick(I first, I last, P cmp = P{}) {
 // Sorting by selection
 //
 
+// Always O(n log n)
 template<class RI, class P = std::less<>>
 void heap(RI first, RI last, P cmp = P{}) {
 	// TODO: Is this cheating?
@@ -71,6 +74,7 @@ void heap(RI first, RI last, P cmp = P{}) {
 // Sorting by merging
 //
 
+// Always O(n log n)
 template <class BI, class P = std::less<>>
 void merge(BI first, BI last, P cmp = P{}) {
 	auto const N = std::distance(first, last);
