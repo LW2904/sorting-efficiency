@@ -9,6 +9,5 @@ runs:
         mkdir build && cd build
         cmake ..
         cmake --build .
-        ls -la
         make test
       shell: bash
