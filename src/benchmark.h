@@ -45,7 +45,7 @@ namespace benchmark {
 			total_chunks, step_type);
 
 		for (size_t i = 0; i < total_chunks; i++) {
-			auto subset_size = step_generator(i)
+			auto subset_size = step_generator(i);
 
 			auto subset = sets::set_t(set.begin(), set.begin() + subset_size);
 			const auto time = experiment(std::bind(algorithm,
