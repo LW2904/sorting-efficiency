@@ -1,6 +1,8 @@
 #pragma once
 
+#include "sets.h"
 #include "sorters.h"
+#include "experiment.h"
 
 #include <cmath>
 #include <cfenv>
