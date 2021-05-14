@@ -124,3 +124,11 @@ I've previously been able to compile and run on
 
 - Arch Linux and Ubuntu with GCC 10.1.0 and CMake 3.17.3
 - Windows 10 (1903) with cl 19.22.27905 and CMake 3.16.5
+
+### CI
+
+![CI build](https://github.com/fs-c/sorting-efficiency/actions/workflows/build-on-push.yml/badge.svg)
+
+There's a CI build job which runs on every push, builds are generated for Linux and available for download as build artifacts. (Switch to the Actions tab and select a workflow run, you'll see a `build` artifact in the Artifacts pane.)
+
+
