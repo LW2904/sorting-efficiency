@@ -14,7 +14,7 @@ int main(int, char *argv[]) {
 		return 1;
 	}
 
-	auto sorters = std::map<const char *, algorithm_t>{
+	auto sorters = std::map<const char *, benchmark::algorithm_t>{
 		{"quick", 	sorters::quick<sets::iterator_t>},
 		{"heap", 	sorters::heap<sets::iterator_t>},
 		{"merge", 	sorters::merge<sets::iterator_t>},

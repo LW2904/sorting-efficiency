@@ -13,7 +13,7 @@
 #include <functional>	// bind
 
 namespace benchmark {
-    using algorithm_t = sorters::sorter_t<sets::iterator_t>;
+	using algorithm_t = sorters::sorter_t<sets::iterator_t>;
 
 	using timings_t = std::map<size_t, experiment::time_t>;
 
