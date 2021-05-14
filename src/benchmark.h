@@ -17,21 +17,31 @@ namespace benchmark {
 
 	using timings_t = std::map<size_t, experiment::time_t>;
 
-	timings_t run(algorithm_t algorithm, sets::set_t set, int total_chunks) {
+	enum step_generator_t { linear, quadratic };
+
+	timings_t run(algorithm_t algorithm, sets::set_t set, int total_chunks,
+		step_generator_t step_generator
+	) {
 		timings_t timings;
 
 		const size_t set_size = set.size();
 
 		std::fesetround(FE_TONEAREST);
 
-		const size_t chunk_size = set_size > total_chunks ?
-			std::nearbyint(set_size / total_chunks) : 1;
+		const size_t chunk_size = set_size > total_chunks ? (
+			std::nearbyint((
+				step_generator == quadratic ? sqrt(set_size) : set_size
+			) / total_chunks)
+		) : 1;
 
 		printf("set_size: %d, chunk_size: %d\n", set_size, chunk_size);
 
-		for (size_t i = chunk_size; i <= set_size; i += chunk_size) {
-			// Important: We have to operate on a _copied subset_.
-			auto subset = sets::set_t(set.begin(), set.begin() + i);
+		for (size_t i = 1; i <= total_chunks; i++) {
+			auto subset_size = step_generator == quadratic ? (
+				pow(chunk_size * i, 2)
+			) : chunk_size * i;
+
+			auto subset = sets::set_t(set.begin(), set.begin() + subset_size);
 			const auto time = experiment(std::bind(algorithm,
 				subset.begin(), subset.end(), std::less<>())
 			).run();

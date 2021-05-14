@@ -34,7 +34,8 @@ int main(int, char *argv[]) {
 	for (auto [sorter_name, sorter] : sorters) {
 		for (auto [set_name, set] : sets) {
 			benchmark::write(cfg.output, sorter_name, set_name,
-				benchmark::run(sorter, set, cfg.total_chunks));
+				benchmark::run(sorter, set, cfg.total_chunks,
+					cfg.step_generator));
 		}
 	}
 

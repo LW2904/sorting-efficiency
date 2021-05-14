@@ -1,6 +1,12 @@
 name: Run benchmark
 
-on: workflow_dispatch
+on:
+  workflow_dispatch:
+    inputs:
+      arguments:
+        description: 'Program arguments'
+        required: false
+        default: ''
 
 jobs:
   run-benchmark:
@@ -14,7 +20,7 @@ jobs:
 
       - name: Run benchmark
         run: |
-          ./build/sorting
+          ./build/sorting ${{ github.event.inputs.arguments }}
     
       - name: Upload benchmark results
         uses: actions/upload-artifact@v2

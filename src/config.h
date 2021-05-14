@@ -1,6 +1,7 @@
 #pragma once
 
 #include "deps/argh.h"
+#include "benchmark.h"
 
 class config {
 	argh::parser cmd;
@@ -14,6 +15,8 @@ class config {
 "  -s, --size        Sets the sample size. (default: 262144 i.e. 512^2)\n"
 "  -c, --chunks      Sets the number of chunks that the set will be devided into.\n"
 "                    (default: 128)\n"
+"  -g, --generator   Specifies the step generator to use, one of 'linear' or\n"
+"                    'quadratic'. (default: quadratic)"
 		);
 	}
 
@@ -30,12 +33,22 @@ class config {
 		cmd({ "size", "s" }) >> sample_size;
 
 		cmd({ "chunks", "c" }) >> total_chunks;
+
+		std::string _step_generator;
+		cmd({ "generator", "g" }) >> _step_generator;
+
+		if (!_step_generator.compare("linear")) {
+			step_generator = benchmark::linear;
+		} else if (!_step_generator.compare("quadratic")) {
+			step_generator = benchmark::quadratic;
+		}
 	}
 
 public:
 	std::string output = "./out";
 	size_t sample_size = 512 * 512;
 	int total_chunks = 128;
+	benchmark::step_generator_t step_generator = benchmark::quadratic;
 
 	bool should_exit = false;
 
