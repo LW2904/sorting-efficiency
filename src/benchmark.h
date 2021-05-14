@@ -17,36 +17,42 @@ namespace benchmark {
 
 	using timings_t = std::map<size_t, experiment::time_t>;
 
-	enum step_generator_t { linear, quadratic };
+	enum step_type_t { linear, quadratic };
 
-	timings_t run(algorithm_t algorithm, sets::set_t set, int total_chunks,
-		step_generator_t step_generator
+	auto get_step_generator(const size_t set_size, const size_t total_chunks,
+		step_type_t step_type
 	) {
-		timings_t timings;
-
-		const size_t set_size = set.size();
-
 		std::fesetround(FE_TONEAREST);
 
-		const size_t chunk_size = set_size > total_chunks ? (
+		const size_t unscaled_i = set_size > total_chunks ? (
 			std::nearbyint((
-				step_generator == quadratic ? sqrt(set_size) : set_size
+				step_type == quadratic ? sqrt(set_size) : set_size
 			) / total_chunks)
 		) : 1;
 
-		printf("set_size: %d, chunk_size: %d\n", set_size, chunk_size);
+		return [&](size_t i) {
+			return pow(unscaled_i * (i + 1),
+				step_type == quadratic ? 2 : 1);
+		}
+	}
 
-		for (size_t i = 1; i <= total_chunks; i++) {
-			auto subset_size = step_generator == quadratic ? (
-				pow(chunk_size * i, 2)
-			) : chunk_size * i;
+	timings_t run(algorithm_t algorithm, sets::set_t set, int total_chunks,
+		step_type_t step_type
+	) {
+		timings_t timings;
+
+		const auto step_generator = get_step_generator(set.size(),
+			total_chunks, step_type);
+
+		for (size_t i = 0; i < total_chunks; i++) {
+			auto subset_size = step_generator(i)
 
 			auto subset = sets::set_t(set.begin(), set.begin() + subset_size);
 			const auto time = experiment(std::bind(algorithm,
 				subset.begin(), subset.end(), std::less<>())
 			).run();
 
-			timings.emplace(i, time.count());
+			timings.emplace(subset_size, time.count());
 		}
 
 		return timings;
