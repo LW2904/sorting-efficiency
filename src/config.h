@@ -1,3 +1,5 @@
+#pragma once
+
 #include "deps/argh.h"
 
 class config {
