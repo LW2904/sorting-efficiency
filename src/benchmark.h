@@ -24,15 +24,17 @@ namespace benchmark {
 	) {
 		std::fesetround(FE_TONEAREST);
 
-		const size_t unscaled_i = set_size > total_chunks ? (
+		// Determine the `a` in a function of the type f(x) = ax^2 + b where
+		// f(total_chunks) = set_size. 
+		const size_t a = set_size > total_chunks ? (
 			std::nearbyint((
 				step_type == quadratic ? sqrt(set_size) : set_size
 			) / total_chunks)
 		) : 1;
 
+		// Return a lambda which models f
 		return [&](size_t i) {
-			return pow(unscaled_i * (i + 1),
-				step_type == quadratic ? 2 : 1);
+			return pow(a * (i + 1), step_type == quadratic ? 2 : 1);
 		}
 	}
 
