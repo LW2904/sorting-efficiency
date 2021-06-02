@@ -12,7 +12,7 @@ runs:
         make test
       shell: bash
 
-    -run: |
+    - run: |
         mkdir debug && cd debug
         cmake -DCMAKE_BUILD_TYPE=Debug ..
         cmake --build .
