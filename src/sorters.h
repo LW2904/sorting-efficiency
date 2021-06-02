@@ -42,9 +42,9 @@ void quick(I first, I last, P cmp = P{}) {
 	auto const pivot = *std::next(first, N / 2);
 
 	// TODO: These two calls to std::partition are suboptimal.
-	auto const middle1 = std::partition(first, last, [=](auto const &elem) {
+	auto const middle1 = std::partition(first, last, [&, pivot](auto const &elem) {
 		return cmp(elem, pivot); });
-	auto const middle2 = std::partition(middle1, last, [=](auto const &elem) {
+	auto const middle2 = std::partition(middle1, last, [&, pivot](auto const &elem) {
 		return !cmp(pivot, elem); });
 
 	quick(first, middle1, cmp);

@@ -6,7 +6,7 @@
 class config {
 	argh::parser cmd;
 
-	void print_help() {
+	static void print_help() {
 		printf(
 "Usage: sorting [options]\n"
 "Options:\n"
@@ -37,9 +37,9 @@ class config {
 		std::string _step_type;
 		cmd({ "step-type", "t" }) >> _step_type;
 
-		if (!_step_type.compare("linear")) {
+		if (_step_type == "linear") {
 			step_type = benchmark::linear;
-		} else if (!_step_type.compare("quadratic")) {
+		} else if (_step_type == "quadratic") {
 			step_type = benchmark::quadratic;
 		}
 	}
@@ -55,7 +55,7 @@ public:
 
 	bool should_exit = false;
 
-	config(char *argv[]) {
+	explicit config(char *argv[]) {
 		parse(argv);
 	};
 };

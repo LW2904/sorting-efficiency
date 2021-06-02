@@ -14,7 +14,7 @@ public:
 	explicit experiment(std::function<void()> algorithm)
 		: algorithm(std::move(algorithm)) { };
 
-	auto run() const {
+	[[nodiscard]] auto run() const {
 		const auto start = std::chrono::steady_clock::now();
 
 		algorithm();

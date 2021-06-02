@@ -2,7 +2,6 @@
 #include "config.h"
 #include "sorters.h"
 #include "benchmark.h"
-#include "experiment.h"
 
 #include <map>		// map
 #include <cstdio>	// printf
