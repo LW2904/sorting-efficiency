@@ -21,11 +21,12 @@ add_executable(sorting-efficiency
     src/main.cpp)
 
 target_include_directories(sorting-efficiency PRIVATE
-        ${CMAKE_CURRENT_SOURCE_DIR}/src)
+    ${CMAKE_CURRENT_SOURCE_DIR}/src)
 
 if (COMPILER STREQUAL "GNU")
     add_compile_options(-Wall -Wextra -Werror)
 elseif (COMPILER STREQUAL "MSVC")
+    # /WX should be added here at some point
     add_compile_options(/Wall)
 else()
     message(WARNING "Unknown compiler, not setting custom compile flags")
@@ -49,7 +50,7 @@ else ()
     if (COMPILER STREQUAL "GNU")
         add_compile_options(-Ofast -g0)
     elseif (COMPILER STREQUAL "MSVC")
-        add_compile_options(/O2 /Oi /link /DEBUG:NONE)
+        add_compile_options(/O2)
     endif()
 endif ()
 
