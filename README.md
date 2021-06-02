@@ -3,8 +3,8 @@
 This is to be the backbone of a "pre-scientific paper" (don't ask me, [ask these guys](https://www.bmbwf.gv.at/en.html)) titled "Efficiency of Sorting Algorithms". It is being written to answer the research question: "How does the theoretical efficiency of selected sorting algorithms relate to the 'practical efficiency' of said algorithms?".
 
 <p float="middle">
-  <img src="https://github.com/fs-c/sorting-efficiency/blob/master/plots/md_insertion.png" width="390" />
-  <img src="https://github.com/fs-c/sorting-efficiency/blob/master/plots/xs_sorted.png" width="390" /> 
+  <img src="https://github.com/fs-c/sorting-efficiency/blob/master/example/plots/md_insertion.png" width="390" />
+  <img src="https://github.com/fs-c/sorting-efficiency/blob/master/example/plots/xs_sorted.png" width="390" /> 
 </p>
 
 ---
@@ -17,7 +17,7 @@ This project implements
   - quick sort
   - heap sort
   - merge sort
-- [dataset generators](https://github.com/LW2904/sorting-efficiency/blob/master/src/sets.h), namely
+- [set generators](https://github.com/LW2904/sorting-efficiency/blob/master/src/sets.h), namely
   - sorted
   - inverted
   - random
@@ -39,8 +39,8 @@ Options:
 The default (and currently _only_) behaviour is to generate files named `${sorter name}_${set name}` in the `./out/` directory (you can change this with the `-o` option).
 
 ```
-./build/sorting -o data
-tree data
+./build/sorting -o example/data
+tree example/data
 data
 ├── heap_inverted
 ├── heap_random
@@ -63,37 +63,13 @@ cat data/heap_inverted
 
 where the first row is the number of items sorted, and the second row is the time in microseconds it took the sorter to do so. By default, there are 128 chunks (columns), this can be changed with the `-c` option.
 
-These files can be loaded as-is into applications like [gnuplot](http://www.gnuplot.info/). The two graphs at the top of this file, for example, were generated using the gnuplot scripts in the `plots/` folder.
-
-### Benchmarking
-
-A `benchmark.sh` script is provided, which generates the following structure,
-
-```
-data
-├── md
-│   ├── heap_inverted
-│   ├── heap_random
-│   ├── heap_sorted
-│   ├── insertion_inverted
-│   └── ...
-├── sm
-|   ├── heap_inverted
-│   └── ...
-└── xs
-    ├── heap_inverted
-    └── ...
-
-3 directories, 36 files
-```
-
-where `md` contains timings on a `2^18` sized, `sm` on a `2^8` and `xs` on a `2^4` sized dataset.
+These files can be loaded as-is into applications like [gnuplot](http://www.gnuplot.info/) or used with [pgfplots](https://mirror.easyname.at/ctan/graphics/pgf/contrib/pgfplots/doc/pgfplots.pdf). The two graphs at the top of this file, for example, were generated using the gnuplot scripts in the `examples/plots` folder using data in `examples/data`.
 
 ## Sorters
 
 Sorters are functions with the signature `void(I first, I last, P cmp = P{})` where `I` models an Iterator and `P` models a Predicate (defaults to `std::less<>`).
 
-These implementations _aren't_ excessively optimized for any metric. This means that there are certainly faster versions of these algorithms around. They do however rely strongly on the STL, which is (usually) heavily optimized and thoroughly tested, and which allows the implementations to be concise as well as easy to read and understand -- arguably one of the most important properties of an implementation.
+These implementations _aren't_ excessively optimized for any metric. This means that there are certainly faster versions of these algorithms around. They do however rely strongly on the STL, which is (usually) heavily optimized and thoroughly tested. This is done primarily to avoid any kind of bias in the development, since one might be tempted to optimize one algorithm more than another when writing them from scratch. It also allows for the the implementations to be concise as well as easy to read and understand which are arguably some of the most important properties of any code.
 
 ## Sets
 
