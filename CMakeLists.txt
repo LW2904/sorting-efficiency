@@ -9,13 +9,27 @@ endif (NOT CMAKE_BUILD_TYPE)
 
 message(STATUS "Build type: ${CMAKE_BUILD_TYPE}")
 
+if (CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
+    set(COMPILER "GNU")
+elseif (CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
+    set(COMPILER "MSVC")
+endif()
+
+message(STATUS "Compiler: ${COMPILER}")
+
 add_executable(sorting-efficiency
     src/main.cpp)
 
 target_include_directories(sorting-efficiency PRIVATE
         ${CMAKE_CURRENT_SOURCE_DIR}/src)
 
-add_compile_options(-Wall -Wextra -Werror)
+if (COMPILER STREQUAL "GNU")
+    add_compile_options(-Wall -Wextra -Werror)
+elseif (COMPILER STREQUAL "MSVC")
+    add_compile_options(/Wall /WX)
+else()
+    message(WARNING "Unknown compiler, not setting custom compile flags")
+endif()
 
 if ("${CMAKE_BUILD_TYPE}" STREQUAL "Debug")
     # The additional / is important to remove the last character from the path.
@@ -25,9 +39,18 @@ if ("${CMAKE_BUILD_TYPE}" STREQUAL "Debug")
     string(LENGTH "${CMAKE_SOURCE_DIR}/" SOURCE_PATH_SIZE)
 
     add_compile_definitions(DEBUG SOURCE_PATH_SIZE=${SOURCE_PATH_SIZE})
-    add_compile_options(-g3)
+
+    if (COMPILER STREQUAL "GNU")
+        add_compile_options(-g3)
+    elseif (COMPILER STREQUAL "MSVC")
+        add_compile_options(/Z7 /Od)
+    endif()
 else ()
-    add_compile_options(-Ofast -g0)
+    if (COMPILER STREQUAL "GNU")
+        add_compile_options(-Ofast -g0)
+    elseif (COMPILER STREQUAL "MSVC")
+        add_compile_options(/O2 /Oi /link /DEBUG:NONE)
+    endif()
 endif ()
 
 target_compile_features(sorting-efficiency PRIVATE cxx_std_17)
