@@ -10,7 +10,9 @@ runs:
         cmake -DCMAKE_BUILD_TYPE=Release ..
         cmake --build .
         make test
+      shell: bash
 
+    -run: |
         mkdir debug && cd debug
         cmake -DCMAKE_BUILD_TYPE=Debug ..
         cmake --build .
