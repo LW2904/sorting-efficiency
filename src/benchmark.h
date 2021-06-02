@@ -35,8 +35,8 @@ namespace benchmark {
 		// Return a lambda which models f
 		return [&](size_t i) {
 			return pow(a * (i + 1), step_type == quadratic ? 2 : 1);
-		}
-	}
+		};
+	};
 
 	timings_t run(algorithm_t algorithm, sets::set_t set, int total_chunks,
 		step_type_t step_type

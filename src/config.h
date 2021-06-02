@@ -34,20 +34,23 @@ class config {
 
 		cmd({ "chunks", "c" }) >> total_chunks;
 
-		std::string _step_generator;
-		cmd({ "step-type", "t" }) >> _step_generator;
+		std::string _step_type;
+		cmd({ "step-type", "t" }) >> _step_type;
 
-		if (!_step_generator.compare("linear")) {
-			step_generator = benchmark::linear;
-		} else if (!_step_generator.compare("quadratic")) {
-			step_generator = benchmark::quadratic;
+		if (!_step_type.compare("linear")) {
+			step_type = benchmark::linear;
+		} else if (!_step_type.compare("quadratic")) {
+			step_type = benchmark::quadratic;
 		}
 	}
 
 public:
 	std::string output = "./out";
+
 	size_t sample_size = 512 * 512;
+	
 	int total_chunks = 128;
+
 	benchmark::step_type_t step_type = benchmark::quadratic;
 
 	bool should_exit = false;
