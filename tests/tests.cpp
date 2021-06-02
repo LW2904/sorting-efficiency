@@ -62,14 +62,6 @@ TEST_CASE("sort works as expected", "[sorter]") {
     }
 }
 
-// Straight from https://en.cppreference.com/w/cpp/chrono/duration/abs
-template <class Rep, class Period, class = std::enable_if_t<
-        std::chrono::duration<Rep, Period>::min() < std::chrono::duration<Rep, Period>::zero()>>
-constexpr std::chrono::duration<Rep, Period> abs(std::chrono::duration<Rep, Period> d)
-{
-    return d >= d.zero() ? d : -d;
-}
-
 TEST_CASE("experiment times with reasonably accuracy", "[experiment]") {
     auto duration = std::chrono::milliseconds(100);
     const auto time = experiment([&] { std::this_thread::sleep_for(duration); }).run();
