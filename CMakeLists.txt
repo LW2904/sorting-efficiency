@@ -26,7 +26,7 @@ target_include_directories(sorting-efficiency PRIVATE
 if (COMPILER STREQUAL "GNU")
     add_compile_options(-Wall -Wextra -Werror)
 elseif (COMPILER STREQUAL "MSVC")
-    add_compile_options(/Wall /WX)
+    add_compile_options(/Wall)
 else()
     message(WARNING "Unknown compiler, not setting custom compile flags")
 endif()
