@@ -74,5 +74,5 @@ TEST_CASE("experiment times with reasonably accuracy", "[experiment]") {
     auto duration = std::chrono::milliseconds(100);
     const auto time = experiment([&] { std::this_thread::sleep_for(duration); }).run();
 
-    REQUIRE(abs(duration - time) <= std::chrono::milliseconds(10));
+    REQUIRE((duration > time ? (duration - time) : (time - duration)) <= std::chrono::milliseconds(10));
 }
