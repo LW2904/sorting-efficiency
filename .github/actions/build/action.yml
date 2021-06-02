@@ -6,8 +6,12 @@ runs:
 
   steps:
     - run: |
-        mkdir build && cd build
-        cmake ..
+        mkdir release && cd release
+        cmake -DCMAKE_BUILD_TYPE=Release ..
         cmake --build .
         make test
+
+        mkdir debug && cd debug
+        cmake -DCMAKE_BUILD_TYPE=Debug ..
+        cmake --build .
       shell: bash
