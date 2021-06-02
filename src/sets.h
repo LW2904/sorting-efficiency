@@ -5,6 +5,7 @@
 #include <vector>	// vector
 #include <cstddef>	// size_t
 #include <numeric>	// iota
+#include <functional>	// function
 
 namespace sets {
 	// Sets are expected to contain uniform numbers, i.e. if there ever is 
