@@ -29,7 +29,7 @@ int main(int, char *argv[]) {
 		{"inverted",	sets::inverted(set_size)},
 	};
 
-	printf("sorting %d elements\n", set_size);
+	printf("sorting %ld elements\n", set_size);
 
 	for (auto [sorter_name, sorter] : sorters) {
 		for (auto [set_name, set] : sets) {

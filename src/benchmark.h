@@ -33,7 +33,7 @@ namespace benchmark {
 		) : 1;
 
 		// Return a lambda which models f
-		return [&](size_t i) {
+Cap		return [=](size_t i) {
 			return pow(a * (i + 1), step_type == quadratic ? 2 : 1);
 		};
 	};
@@ -46,7 +46,7 @@ namespace benchmark {
 		const auto step_generator = get_step_generator(set.size(),
 			total_chunks, step_type);
 
-		for (size_t i = 0; i < total_chunks; i++) {
+		for (int i = 0; i < total_chunks; i++) {
 			auto subset_size = step_generator(i);
 
 			auto subset = sets::set_t(set.begin(), set.begin() + subset_size);
