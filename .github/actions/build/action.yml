@@ -1,5 +1,10 @@
 name: 'Build'
 description: 'Builds the project into an executable and runs tests'
+inputs:
+  generator:
+    description: 'The CMake generator to use'
+    required: false
+    default: ''
 
 runs:
   using: 'composite'
@@ -7,13 +12,13 @@ runs:
   steps:
     - run: |
         mkdir release && cd release
-        cmake -DCMAKE_BUILD_TYPE=Release ..
+        cmake -DCMAKE_BUILD_TYPE=Release -G "${{inputs.generator}}" ..
         cmake --build .
         make test
       shell: bash
 
     - run: |
         mkdir debug && cd debug
-        cmake -DCMAKE_BUILD_TYPE=Debug ..
+        cmake -DCMAKE_BUILD_TYPE=Debug -G "${{inputs.generator}}" ..
         cmake --build .
       shell: bash

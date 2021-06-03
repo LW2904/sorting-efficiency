@@ -6,7 +6,13 @@ jobs:
   build:
     strategy:
       matrix:
-        os: [windows-latest, ubuntu-latest]
+        include:
+          - os: windows-latest
+            os-name: windows
+            generator: 'Visual Studio 16 2019'
+          - os: ubuntu-latest
+            os-name: ubuntu
+            generator: 'Unix Makefiles'
 
     runs-on: ${{ matrix.os }}
 
@@ -15,6 +21,8 @@ jobs:
 
       - name: Build executable
         uses: ./.github/actions/build
+        with:
+          generator: ${{ matrix.generator }}
       
       - name: Consolidate builds
         shell: bash
@@ -26,5 +34,5 @@ jobs:
       - name: Upload built executable
         uses: actions/upload-artifact@v2
         with:
-          name: build-${{ matrix.os }}
+          name: build-${{ matrix.os-name }}
           path: build
