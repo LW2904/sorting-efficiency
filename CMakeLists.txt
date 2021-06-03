@@ -9,19 +9,44 @@ endif (NOT CMAKE_BUILD_TYPE)
 
 message(STATUS "Build type: ${CMAKE_BUILD_TYPE}")
 
-#if (CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
-#    set(COMPILER "GNU")
-#elseif (CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
-#    set(COMPILER "MSVC")
-#endif()
-#
-#message(STATUS "Compiler: ${COMPILER}")
+if (CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
+    set(COMPILER "GNU")
+elseif (CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
+    set(COMPILER "MSVC")
+endif()
+
+message(STATUS "Compiler: ${COMPILER}")
 
 add_executable(sorting-efficiency
     src/main.cpp)
 
 target_include_directories(sorting-efficiency PRIVATE
     ${CMAKE_CURRENT_SOURCE_DIR}/src)
+
+if (COMPILER STREQUAL "GNU")
+    target_compile_options(sorting-efficiency PRIVATE -Wall -Wextra -Werror)
+elseif (COMPILER STREQUAL "MSVC")
+    # Maybe /WX should be added here at some point
+    target_compile_options(sorting-efficiency PRIVATE /Wall)
+else()
+    message(WARNING "Unknown compiler, not setting custom compile flags")
+endif()
+
+if ("${CMAKE_BUILD_TYPE}" STREQUAL "Debug")
+    if (COMPILER STREQUAL "GNU")
+        target_compile_options(sorting-efficiency PRIVATE -g3)
+    elseif (COMPILER STREQUAL "MSVC")
+        target_compile_options(sorting-efficiency PRIVATE /Z7 /Od)
+    endif()
+else ()
+    if (COMPILER STREQUAL "GNU")
+        target_compile_options(sorting-efficiency PRIVATE -Ofast -g0)
+    elseif (COMPILER STREQUAL "MSVC")
+        target_compile_options(sorting-efficiency PRIVATE /O2 /DNDEBUG /Zi /Gy)
+        target_link_options(sorting-efficiency PRIVATE
+            /DEBUG /INCREMENTAL:NO /OPT:REF /OPT:ICF)
+    endif()
+endif ()
 
 target_compile_features(sorting-efficiency PRIVATE cxx_std_17)
 

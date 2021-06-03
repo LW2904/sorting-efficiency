@@ -14,8 +14,8 @@ runs:
         mkdir release
         mkdir temp && cd temp
         cmake -DCMAKE_BUILD_TYPE=Release -G "${{inputs.generator}}" ..
-        cmake --build .
-        cmake --build . --target test
+        cmake --build . --config=Release
+        cmake --build . --config=Release --target test
         mv Release/* ../release
         rm -rf temp
       shell: bash
@@ -24,7 +24,7 @@ runs:
         mkdir debug
         mkdir temp && cd temp
         cmake -DCMAKE_BUILD_TYPE=Debug -G "${{inputs.generator}}" ..
-        cmake --build .
+        cmake --build . --config=Debug
         mv Debug/* ../debug
         rm -rf temp
       shell: bash
