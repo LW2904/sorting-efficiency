@@ -14,7 +14,7 @@ runs:
         mkdir release && cd release
         cmake -DCMAKE_BUILD_TYPE=Release -G "${{inputs.generator}}" ..
         cmake --build .
-        make test
+        cmake --build . --target test
       shell: bash
 
     - run: |
