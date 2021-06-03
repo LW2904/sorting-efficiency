@@ -19,8 +19,15 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      - name: Build executable
-        uses: ./.github/actions/build
+      - name: Build executable on Windows
+        if: ${{ matrix.os == windows }}
+        uses: ./.github/actions/build-windows
+        with:
+          generator: ${{ matrix.generator }}
+
+      - name: Build executable on Ubuntu
+        if: ${{ matrix.os == ubuntu }}
+        uses: ./.github/actions/build-ubuntu
         with:
           generator: ${{ matrix.generator }}
       

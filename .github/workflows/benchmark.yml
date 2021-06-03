@@ -16,7 +16,7 @@ jobs:
       - uses: actions/checkout@v2
 
       - name: Build executable
-        uses: ./.github/actions/build
+        uses: ./.github/actions/build-ubuntu
 
       - name: Run benchmark
         run: |
