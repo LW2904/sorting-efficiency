@@ -13,7 +13,7 @@ runs:
     - run: |
         mkdir release
         mkdir -p temp/build && cd temp/build
-        cmake -DCMAKE_BUILD_TYPE=Release -G "${{inputs.generator}}" ..
+        cmake -DCMAKE_BUILD_TYPE=Release -G "${{inputs.generator}}" ../..
         cmake --build . --config=Release
         cmake --build . --config=Release --target test
         cd ..
@@ -25,7 +25,7 @@ runs:
     - run: |
         mkdir debug
         mkdir -p temp/debug && cd temp/debug
-        cmake -DCMAKE_BUILD_TYPE=Debug -G "${{inputs.generator}}" ..
+        cmake -DCMAKE_BUILD_TYPE=Debug -G "${{inputs.generator}}" ../..
         cmake --build . --config=Debug
         cd ..
         mv ./**/benchmark* ../debug
