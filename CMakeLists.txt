@@ -61,3 +61,10 @@ target_compile_features(sorting-efficiency PRIVATE cxx_std_17)
 set_target_properties(sorting-efficiency PROPERTIES OUTPUT_NAME "sorting")
 
 add_subdirectory(tests)
+
+get_target_property(MAIN_CFLAGS sorting-efficiency COMPILE_OPTIONS)
+message("-- Target compiler flags are: ${MAIN_CFLAGS}")
+
+add_custom_command(TARGET sorting-efficiency POST_BUILD
+    COMMAND echo built with the flags: ${MAIN_CFLAGS})
+
