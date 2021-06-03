@@ -20,13 +20,13 @@ jobs:
       - uses: actions/checkout@v2
 
       - name: Build executable on Windows
-        if: ${{ matrix.os == 'windows' }}
+        if: ${{ matrix.os == 'windows-latest' }}
         uses: ./.github/actions/build-windows
         with:
           generator: ${{ matrix.generator }}
 
       - name: Build executable on Ubuntu
-        if: ${{ matrix.os == 'ubuntu' }}
+        if: ${{ matrix.os == 'ubuntu-latest' }}
         uses: ./.github/actions/build-ubuntu
         with:
           generator: ${{ matrix.generator }}
