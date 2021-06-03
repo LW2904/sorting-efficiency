@@ -50,6 +50,6 @@ endif ()
 
 target_compile_features(sorting-efficiency PRIVATE cxx_std_17)
 
-set_target_properties(sorting-efficiency PROPERTIES OUTPUT_NAME "sorting")
+set_target_properties(sorting-efficiency PROPERTIES OUTPUT_NAME "benchmark")
 
 add_subdirectory(tests)

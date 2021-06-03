@@ -27,7 +27,8 @@ including unit tests for each of the above.
 ## Usage
 
 ```
-Usage: sorting [options]
+$ benchmark -h
+Usage: benchmark [options]
 Options:
   -h, --help        Display this information and exit.
   -o, --output      Sets the output path. (default: ./out)
@@ -39,8 +40,8 @@ Options:
 The default (and currently _only_) behaviour is to generate files named `${sorter name}_${set name}` in the `./out/` directory (you can change this with the `-o` option).
 
 ```
-./build/sorting -o example/data
-tree example/data
+$ benchmark -o example/data
+$ tree example/data
 data
 ├── heap_inverted
 ├── heap_random
@@ -53,7 +54,7 @@ data
 These files contain numeric, tabular data in the format
 
 ```
-cat data/heap_inverted
+$ cat data/heap_inverted
 4096 2927.75
 8192 5522.26
 12288 9303.89
@@ -94,7 +95,7 @@ make
 make test
 ```
 
-You will find an executable named `sorting` in the `build` folder.
+You will find an executable named `benchmark` in the `build` folder.
 
 I've previously been able to compile and run on
 
