@@ -16,8 +16,9 @@ runs:
         cmake -DCMAKE_BUILD_TYPE=Release -G "${{inputs.generator}}" ..
         cmake --build . --config=Release
         cmake --build . --config=Release --target test
-        mv ./**/benchmark* ../release
-        cd .. && rm -rf temp
+        cd ..
+        mv ./**/benchmark* ./release
+        rm -rf temp
       shell: bash
 
     - run: |
@@ -25,6 +26,7 @@ runs:
         mkdir temp && cd temp
         cmake -DCMAKE_BUILD_TYPE=Debug -G "${{inputs.generator}}" ..
         cmake --build . --config=Debug
-        mv ./**/benchmark* ../debug
-        cd .. && rm -rf temp
+        cd ..
+        mv ./**/benchmark* ./debug
+        rm -rf temp
       shell: bash
