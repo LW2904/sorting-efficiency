@@ -32,7 +32,7 @@ void insertion(I first, I last, P cmp = P{}) {
 // Sorting by exchanging
 //
 
-// Best: O(n log n), Worst: O(n^2)
+// Best: O(n log n), worst: O(n^2)
 template <class I, class P = std::less<>>
 void quick(I first, I last, P cmp = P{}) {
 	auto const N = std::distance(first, last);
@@ -41,7 +41,6 @@ void quick(I first, I last, P cmp = P{}) {
 
 	auto const pivot = *std::next(first, N / 2);
 
-	// TODO: These two calls to std::partition are suboptimal.
 	auto const middle1 = std::partition(first, last, [&, pivot](auto const &elem) {
 		return cmp(elem, pivot); });
 	auto const middle2 = std::partition(middle1, last, [&, pivot](auto const &elem) {
@@ -62,8 +61,6 @@ void quick(I first, I last, P cmp = P{}) {
 // Always O(n log n)
 template<class RI, class P = std::less<>>
 void heap(RI first, RI last, P cmp = P{}) {
-	// TODO: Is this cheating?
-
 	std::make_heap(first, last, cmp);
 	std::sort_heap(first, last, cmp);
 }
