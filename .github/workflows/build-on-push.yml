@@ -9,10 +9,10 @@ jobs:
         include:
           - os: windows-latest
             os-name: windows
-            generator: Visual Studio 16 2019
+            generator: 'Visual Studio 16 2019'
           - os: ubuntu-latest
             os-name: ubuntu
-            generator: Unix Makefiles
+            generator: 'Unix Makefiles'
 
     runs-on: ${{ matrix.os }}
 
