@@ -11,14 +11,20 @@ runs:
 
   steps:
     - run: |
-        mkdir release && cd release
+        mkdir release
+        mkdir temp && cd temp
         cmake -DCMAKE_BUILD_TYPE=Release -G "${{inputs.generator}}" ..
         cmake --build .
         cmake --build . --target test
+        mv Release/* ../release
+        rm -rf temp
       shell: bash
 
     - run: |
-        mkdir debug && cd debug
+        mkdir debug
+        mkdir temp && cd temp
         cmake -DCMAKE_BUILD_TYPE=Debug -G "${{inputs.generator}}" ..
         cmake --build .
+        mv Debug/* ../debug
+        rm -rf temp
       shell: bash
