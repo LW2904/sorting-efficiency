@@ -12,13 +12,13 @@ runs:
   steps:
     - run: |
         mkdir release && cd release
-        cmake -DCMAKE_BUILD_TYPE=Release -G ${{inputs.generator}} ..
+        cmake -DCMAKE_BUILD_TYPE=Release -G "${{inputs.generator}}" ..
         cmake --build .
         make test
       shell: bash
 
     - run: |
         mkdir debug && cd debug
-        cmake -DCMAKE_BUILD_TYPE=Debug -G ${{inputs.generator}} ..
+        cmake -DCMAKE_BUILD_TYPE=Debug -G "${{inputs.generator}}" ..
         cmake --build .
       shell: bash
