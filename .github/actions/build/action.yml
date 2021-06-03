@@ -16,7 +16,7 @@ runs:
         cmake -DCMAKE_BUILD_TYPE=Release -G "${{inputs.generator}}" ..
         cmake --build . --config=Release
         cmake --build . --config=Release --target test
-        mv ./**/sorting* ../release
+        mv ./**/{sorting,sorting+(.exe|.pdb)} ../release
         cd .. && rm -rf temp
       shell: bash
 
@@ -25,6 +25,6 @@ runs:
         mkdir temp && cd temp
         cmake -DCMAKE_BUILD_TYPE=Debug -G "${{inputs.generator}}" ..
         cmake --build . --config=Debug
-        mv ./**/sorting* ../debug
+        mv ./**/{sorting,sorting+(.exe|.pdb)} ../debug
         cd .. && rm -rf temp
       shell: bash
