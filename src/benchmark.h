@@ -34,7 +34,8 @@ namespace benchmark {
 
 		// Return a lambda which models f
 		return [a, step_type](size_t i) {
-			return pow(a * double(i + 1), step_type == quadratic ? 2 : 1);
+			const auto power = step_type == quadratic ? 2 : 1;
+			return (std::ptrdiff_t)(pow(a * double(i + 1), power));
 		};
 	}
 
