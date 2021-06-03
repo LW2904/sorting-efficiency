@@ -12,21 +12,23 @@ runs:
   steps:
     - run: |
         mkdir release
-        mkdir temp && cd temp
+        mkdir -p temp/build && cd temp/build
         cmake -DCMAKE_BUILD_TYPE=Release -G "${{inputs.generator}}" ..
         cmake --build . --config=Release
         cmake --build . --config=Release --target test
         cd ..
-        mv ./**/benchmark* ./release
-        rm -rf temp
+        mv ./**/benchmark* ../release
+        cd ..
+        rm -rf ./temp
       shell: bash
 
     - run: |
         mkdir debug
-        mkdir temp && cd temp
+        mkdir -p temp/debug && cd temp/debug
         cmake -DCMAKE_BUILD_TYPE=Debug -G "${{inputs.generator}}" ..
         cmake --build . --config=Debug
         cd ..
-        mv ./**/benchmark* ./debug
+        mv ./**/benchmark* ../debug
+        cd ..
         rm -rf temp
       shell: bash
