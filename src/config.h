@@ -12,11 +12,11 @@ class config {
 "Options:\n"
 "  -h, --help        Display this information and exit.\n"
 "  -o, --output      Sets the output path. (default: ./out)\n"
-"  -s, --size        Sets the sample size. (default: 262144 i.e. 512^2)\n"
+"  -s, --size        Sets the sample size. (default: 262144 i.e. 2^18)\n"
 "  -c, --chunks      Sets the number of chunks that the set will be devided into.\n"
 "                    (default: 128)\n"
 "  -t, --step-type   Specifies the step type to use, one of 'linear' or\n"
-"                    'quadratic'. (default: quadratic)"
+"                    'quadratic'. (default: quadratic)\n"
 		);
 	}
 
