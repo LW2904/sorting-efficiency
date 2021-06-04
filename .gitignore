@@ -38,6 +38,3 @@
 # Default CMake build folder
 /build
 cmake-build-debug
-
-# Benchmark results
-data
