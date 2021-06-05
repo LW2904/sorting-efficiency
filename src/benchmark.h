@@ -38,7 +38,7 @@ namespace benchmark {
 	constexpr auto get_subset_size_factory(const size_t set_size, const size_t total_chunks,
 		const step_type_t step_type
 	) {
-		const auto power = step_type == linear ? 1 : 2;
+		const auto power = step_type == linear || set_size <= total_chunks ? 1 : 2;
 
 		// Determine the `a` in a function of the type f(x) = ax (for
 		// the linear step type) or f(x) = ax^2 (for the quadratic one).
