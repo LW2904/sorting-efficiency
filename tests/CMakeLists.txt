@@ -5,6 +5,8 @@ add_library(tests-main STATIC main.cpp)
 # This contains the actual tests.
 add_executable(tests-run tests.cpp)
 
+target_compile_features(tests-run PRIVATE cxx_std_17)
+
 target_link_libraries(tests-run tests-main)
 
 target_compile_definitions(tests-run PRIVATE CATCH_CONFIG_FAST_COMPILE
