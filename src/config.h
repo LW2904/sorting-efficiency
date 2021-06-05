@@ -23,19 +23,19 @@ class config {
 	void parse(char *argv[]) {
 		cmd.parse(argv, argh::parser::PREFER_PARAM_FOR_UNREG_OPTION);
 
-		if (cmd[{ "h", "help" }]) {
+		if (cmd[{"h", "help"}]) {
 			should_exit = true;
 			return print_help();
 		}
 
-		cmd({ "output", "o" }) >> output;
+		cmd({"output", "o"}) >> output;
 
-		cmd({ "size", "s" }) >> sample_size;
+		cmd({"size", "s"}) >> sample_size;
 
-		cmd({ "chunks", "c" }) >> total_chunks;
+		cmd({"chunks", "c"}) >> total_chunks;
 
 		std::string _step_type;
-		cmd({ "step-type", "t" }) >> _step_type;
+		cmd({"step-type", "t"}) >> _step_type;
 
 		if (_step_type == "linear") {
 			step_type = benchmark::linear;
@@ -48,7 +48,7 @@ public:
 	std::string output = "./out";
 
 	size_t sample_size = 512 * 512;
-	
+
 	int total_chunks = 128;
 
 	benchmark::step_type_t step_type = benchmark::linear;

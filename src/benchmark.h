@@ -18,7 +18,9 @@ namespace benchmark {
 
 	using timings_t = std::map<size_t, experiment::time_t>;
 
-	enum step_type_t { linear, quadratic };
+	enum step_type_t {
+		linear, quadratic
+	};
 
 	namespace detail {
 		// A version of pow from cmath that only works fo y = 1 and y = 2.
@@ -40,7 +42,7 @@ namespace benchmark {
 
 		// Determine the `a` in a function of the type f(x) = ax (for
 		// the linear step type) or f(x) = ax^2 (for the quadratic one).
-		const int a = set_size > total_chunks ? ((int)(
+		const int a = set_size > total_chunks ? ((int) (
 			set_size / detail::pow2(total_chunks, power)
 		)) : 1;
 
@@ -61,7 +63,7 @@ namespace benchmark {
 			total_chunks, step_type);
 
 		for (int i = 1; i <= total_chunks; i++) {
-			auto subset_size = (std::ptrdiff_t)get_subset_size(i);
+			auto subset_size = (std::ptrdiff_t) get_subset_size(i);
 
 			auto subset = sets::set_t(set.begin(), set.begin() + subset_size);
 			const auto time = experiment([&]() {
@@ -78,7 +80,7 @@ namespace benchmark {
 	// 	 operator would be significantly cleaner than this.
 	// TODO: const char * should be std::string.
 	void write(const std::string &sub_path, const char *algo_name,
-	    	const char *set_name, const timings_t &timings
+		const char *set_name, const timings_t &timings
 	) {
 		std::filesystem::path file_path;
 

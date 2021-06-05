@@ -14,18 +14,18 @@ int main(int, char *argv[]) {
 	}
 
 	auto sorters = std::map<const char *, benchmark::algorithm_t>{
-		{"quick", 	sorters::quick<sets::iterator_t>},
-		{"heap", 	sorters::heap<sets::iterator_t>},
-		{"merge", 	sorters::merge<sets::iterator_t>},
-		{"insertion", 	sorters::insertion<sets::iterator_t>},
+		{"quick",     sorters::quick<sets::iterator_t>},
+		{"heap",      sorters::heap<sets::iterator_t>},
+		{"merge",     sorters::merge<sets::iterator_t>},
+		{"insertion", sorters::insertion<sets::iterator_t>},
 	};
 
 	const size_t set_size = cfg.sample_size;
 
 	auto sets = std::map<const char *, sets::set_t>{
-		{"sorted", 	sets::sorted(set_size)},
-		{"random", 	sets::random(set_size)},
-		{"inverted",	sets::inverted(set_size)},
+		{"sorted",   sets::sorted(set_size)},
+		{"random",   sets::random(set_size)},
+		{"inverted", sets::inverted(set_size)},
 	};
 
 	printf("sorting %ld elements\n", set_size);
