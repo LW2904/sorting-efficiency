@@ -8,7 +8,7 @@ class config {
 
 	static void print_help() {
 		printf(
-"Usage: sorting [options]\n"
+"Usage: benchmark [options]\n"
 "Options:\n"
 "  -h, --help        Display this information and exit.\n"
 "  -o, --output      Sets the output path. (default: ./out)\n"
@@ -16,7 +16,7 @@ class config {
 "  -c, --chunks      Sets the number of chunks that the set will be devided into.\n"
 "                    (default: 128)\n"
 "  -t, --step-type   Specifies the step type to use, one of 'linear' or\n"
-"                    'quadratic'. (default: quadratic)\n"
+"                    'quadratic'. (default: linear)\n"
 		);
 	}
 
@@ -51,7 +51,7 @@ public:
 	
 	int total_chunks = 128;
 
-	benchmark::step_type_t step_type = benchmark::quadratic;
+	benchmark::step_type_t step_type = benchmark::linear;
 
 	bool should_exit = false;
 
