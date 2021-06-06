@@ -54,7 +54,7 @@ namespace benchmark {
 		};
 	}
 
-	timings_t run(algorithm_t algorithm, sets::set_t set, int total_chunks,
+	timings_t run(algorithm_t algorithm, sets::set_t set, size_t total_chunks,
 		step_type_t step_type
 	) {
 		timings_t timings;
@@ -62,7 +62,7 @@ namespace benchmark {
 		const auto get_subset_size = get_subset_size_factory(set.size(),
 			total_chunks, step_type);
 
-		for (int i = 1; i <= total_chunks; i++) {
+		for (size_t i = 1; i <= total_chunks; i++) {
 			auto subset_size = (std::ptrdiff_t) get_subset_size(i);
 
 			auto subset = sets::set_t(set.begin(), set.begin() + subset_size);

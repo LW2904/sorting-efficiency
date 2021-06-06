@@ -30,6 +30,14 @@ int main(int, char *argv[]) {
 
 	printf("sorting %ld elements\n", set_size);
 
+	if (cfg.total_chunks > set_size) {
+		printf("warning: the number of subsets to be generated (%zu) "
+		       "is larger than the total set size (%zu), adjust subset count "
+		       "to be equal to set size\n", cfg.total_chunks, set_size);
+
+		cfg.total_chunks = set_size;
+	}
+
 	for (auto [sorter_name, sorter] : sorters) {
 		for (auto [set_name, set] : sets) {
 			benchmark::write(cfg.output, sorter_name, set_name,
