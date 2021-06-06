@@ -63,9 +63,9 @@ TEST_CASE("sort works as expected", "[sorter]") {
 	}
 }
 
-TEST_CASE("experiment times with reasonably accuracy", "[experiment]") {
+TEST_CASE("experiment times with reasonable accuracy", "[experiment]") {
 	constexpr auto duration = std::chrono::milliseconds(100);
-	constexpr auto error_margin = std::chrono::milliseconds(10);
+	constexpr auto error_margin = std::chrono::milliseconds(5);
 
 	const auto time = experiment([&] { std::this_thread::sleep_for(duration); }).run();
 
