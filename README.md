@@ -115,11 +115,11 @@ a = set_size / total_chunks^2
 Thus, the size of the `i`th chunk can be calculated through `(set size / total_chunks^2) * i^2`.
 
 <p float="middle">
-  <img src="https://github.com/fs-c/sorting-efficiency/blob/master/example/steps/step_types.png" width="390" />
   <img src="https://github.com/fs-c/sorting-efficiency/blob/master/example/steps/small_step_types.png" width="390" /> 
+  <img src="https://github.com/fs-c/sorting-efficiency/blob/master/example/steps/step_types.png" width="390" />
 </p>
 
-You can see two graphs of the chunk sizes for a total set size of 2^18, divided into 128 chunks (the default value) with the linear and quadratic step types.
+The above are two graphs of the chunk sizes for a total set size of 2^18, divided into 128 chunks (the default values) with the linear and quadratic step types.
 
 ## Building
 
