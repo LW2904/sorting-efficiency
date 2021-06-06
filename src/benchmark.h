@@ -50,7 +50,7 @@ namespace benchmark {
 		return [a, power, set_size](const size_t i) constexpr {
 			const auto value = a * detail::pow2(i, power);
 
-			return value < 0 ? 0 : value >= set_size ? set_size : value;
+			return value >= set_size ? set_size : value;
 		};
 	}
 
