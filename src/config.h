@@ -49,7 +49,7 @@ public:
 
 	size_t sample_size = 512 * 512;
 
-	int total_chunks = 128;
+	size_t total_chunks = 128;
 
 	benchmark::step_type_t step_type = benchmark::linear;
 
