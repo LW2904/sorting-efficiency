@@ -2,8 +2,10 @@
 # headers would be a problem otherwise.
 add_library(tests-main STATIC main.cpp)
 
-# This contains the actual tests.
-add_executable(tests-run tests.cpp)
+# This contains the actual tests and implementation files.
+add_executable(tests-run tests.cpp
+	../src/benchmark.cpp ../src/config.cpp ../src/experiment.cpp
+	../src/sets.cpp ../src/sorters.hpp)
 
 target_compile_features(tests-run PRIVATE cxx_std_17)
 

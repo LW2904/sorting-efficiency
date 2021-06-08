@@ -81,7 +81,7 @@ TEST_CASE("subset size generator works as expected", "[step type]") {
 			8, 16, step_type);
 
 		for (int i = 1; i <= 16; i++) {
-			if (i <= 8) {
+			if (i < 8) {
 				REQUIRE(get_subset_size(i) == i);
 			} else {
 				REQUIRE(get_subset_size(i) == 8);

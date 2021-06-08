@@ -87,14 +87,14 @@ Datasets are of type `std::vector<int>`.
 
 The most basic set type is `sorted`, which is simply initialized with `std::iota(first, last, 1)`, resulting in a set with the contents `1, 2, 3, ..., n` where `n` is the set size.
 
-Other set types are a permutation of this, namely
+Other set types are derived from this, namely
 
-- `random`: a `std::shuffle`d version of `sorted`
+- `random`: a random permutation of `sorted`
 - `inverted`: an inverted version of `sorted` (`n, ..., 3, 2, 1`)
 
 ## Step Types
 
-As was established earlier, running `benchmark -o example/data` generates a number of files which contain data arranged into rows of the format `[chunk size] [time]`.
+Running `benchmark -o example/data` generates a number of files which contain data arranged into rows of the format `[chunk size] [time]` (see [Usage](https://github.com/fs-c/sorting-efficiency#usage)).
 
 By default, these chunk sizes increase linearly in value, meaning chunk sizes increase by a constant value for every row; the step size is constant and thus a linear step type is used. 
 
@@ -126,13 +126,23 @@ The above are two graphs of the chunk sizes for a total set size of 2^18, divide
 Make sure that you have a C++17 conformant compiler and CMake installed.
 
 ```
+# get the code
 git clone https://github.com/LW2904/sorting-efficiency.git
-# the folder name is merely a suggestion
+
+# create a folder for the build files
 mkdir build && cd build
+
+# generate build files
 cmake ..
-# to build all targets
+
+# build the executable
+cmake --build .
+# or, on Linux/with MinGW
 make
-# to run unit tests
+
+# build and run unit tests
+cmake --build . --target test
+# or, on Linux/with MinGW
 make test
 ```
 
@@ -140,7 +150,7 @@ You will find an executable named `benchmark` in the `build` folder.
 
 I've previously been able to compile and run on
 
-- Arch Linux and Ubuntu with GCC 10.1.0 and CMake 3.17.3
+- Arch Linux and Ubuntu with GCC 10.2.0 and CMake 3.20.2
 - Windows 10 (1903) with cl 19.22.27905 and CMake 3.16.5
 
 ### CI
@@ -148,5 +158,3 @@ I've previously been able to compile and run on
 ![CI build](https://github.com/fs-c/sorting-efficiency/actions/workflows/build-on-push.yml/badge.svg)
 
 There's a CI build job which runs on every push and builds executables for Linux and Windows. The built files are made available as _artifacts_ and can be downloaded by navigating to the [Actions tab](https://github.com/fs-c/sorting-efficiency/actions), selecting a desired workflow run (usually the most recent one) and downloading the appropriate file.
-
-
