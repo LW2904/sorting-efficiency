@@ -10,7 +10,7 @@
 #include "../src/benchmark.h"
 #include "../src/experiment.h"
 
-TEST_CASE("set can be generated", "[set]") {
+TEST_CASE("set is as a expected", "[set]") {
 	constexpr size_t size = 128;
 
 	SECTION("sorted") {
@@ -28,38 +28,42 @@ TEST_CASE("set can be generated", "[set]") {
 	}
 
 	SECTION("random") {
-		auto set = sets::inverted(size);
+		auto set = sets::random(size);
 
 		REQUIRE(set.size() == size);
+		// Make sure random sets are actually random.
+		// TODO?: This is not a very good randomness test (in fact, it
+		// isn't one at all).
+		REQUIRE(set != sets::random(size));
 	}
 }
 
 TEST_CASE("sort works as expected", "[sorter]") {
-	constexpr size_t size = 128;
-	auto set = sets::inverted(size);
+	constexpr size_t size = 8;
+	const auto sorted_set = sets::sorted(size);
+
+	const auto test_sort = [&](const benchmark::algorithm_t &algo) {
+		auto set = sets::inverted(size);
+
+		algo(set.begin(), set.end(), std::less<>{});
+
+		REQUIRE(sorted_set == set);
+	};
 
 	SECTION("insertion") {
-		sorters::insertion(set.begin(), set.end());
-
-		REQUIRE(std::is_sorted(set.begin(), set.end()));
+		test_sort(sorters::insertion<sets::iterator_t>);
 	}
 
 	SECTION("quick") {
-		sorters::quick(set.begin(), set.end());
-
-		REQUIRE(std::is_sorted(set.begin(), set.end()));
+		test_sort(sorters::quick<sets::iterator_t>);
 	}
 
 	SECTION("heap") {
-		sorters::heap(set.begin(), set.end());
-
-		REQUIRE(std::is_sorted(set.begin(), set.end()));
+		test_sort(sorters::merge<sets::iterator_t>);
 	}
 
 	SECTION("merge") {
-		sorters::merge(set.begin(), set.end());
-
-		REQUIRE(std::is_sorted(set.begin(), set.end()));
+		test_sort(sorters::heap<sets::iterator_t>);
 	}
 }
 
