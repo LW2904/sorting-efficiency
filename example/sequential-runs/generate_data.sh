@@ -1,0 +1,16 @@
+../../build/benchmark -t linear -s 512 -c 32 -o ./run1
+../../build/benchmark -t linear -s 512 -c 32 -o ./run2
+../../build/benchmark -t linear -s 512 -c 32 -o ./run3
+../../build/benchmark -t linear -s 512 -c 32 -o ./run4
+../../build/benchmark -t linear -s 512 -c 32 -o ./run5
+../../build/benchmark -t linear -s 512 -c 32 -o ./run6
+../../build/benchmark -t linear -s 512 -c 32 -o ./run7
+../../build/benchmark -t linear -s 512 -c 32 -o ./run8
+../../build/benchmark -t linear -s 512 -c 32 -o ./run9
+../../build/benchmark -t linear -s 512 -c 32 -o ./run10
+../../build/benchmark -t linear -s 512 -c 32 -o ./run11
+../../build/benchmark -t linear -s 512 -c 32 -o ./run12
+../../build/benchmark -t linear -s 512 -c 32 -o ./run13
+../../build/benchmark -t linear -s 512 -c 32 -o ./run14
+../../build/benchmark -t linear -s 512 -c 32 -o ./run15
+../../build/benchmark -t linear -s 512 -c 32 -o ./run16
