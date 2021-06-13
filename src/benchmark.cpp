@@ -99,10 +99,8 @@ benchmark::timings_t benchmark::timings_group::median() {
 	for (auto &[size, times] : rows) {
 		rows_t::mapped_type times_copy{times};
 
-		std::partial_sort(times_copy.begin(),
-			times_copy.begin() + static_cast<ptrdiff_t>(times_copy.size() / 2),
-			times_copy.end()
-		);
+		// A partial sort would be enough.
+		std::sort(times_copy.begin(), times_copy.end());
 
 		const auto median = times_copy.size() % 2 ? (
 			times_copy[times_copy.size() / 2]
