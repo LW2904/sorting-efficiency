@@ -103,7 +103,7 @@ int main(int, char *argv[]) {
 			}
 
 			results.emplace_back(sorter.first, set.first, (
-				timings.size() == 1 ? timings.at(1) : (
+				timings.size() == 1 ? timings.at(0) : (
 					cfg.average ? timings.average() :
 					cfg.median ? timings.median() : timings.at(1)
 				)
