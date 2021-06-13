@@ -50,6 +50,8 @@ else ()
 	endif()
 endif ()
 
+# Setting CXX_STANDARD to make IDEs happy
+set_target_properties(sorting-efficiency PROPERTIES CXX_STANDARD 17)
 target_compile_features(sorting-efficiency PRIVATE cxx_std_17)
 
 set_target_properties(sorting-efficiency PROPERTIES OUTPUT_NAME "benchmark")
