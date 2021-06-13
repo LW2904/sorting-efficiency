@@ -1,5 +1,8 @@
 #include "sets.h"
 
+#include <numeric>	// iota
+#include <functional>	// function
+
 // Sets are expected to contain uniform numbers, i.e. if there ever is
 // going to be a partially sorted set type, it would have to fit that
 // criteria even (or rather, especially) if only a small continuous subset
@@ -24,9 +27,17 @@ sets::set_t sets::inverted(const size_t size) {
 sets::set_t sets::random(const size_t size) {
 	auto set = sorted(size);
 
-	detail::random_shuffle(set.begin(), set.end());
+	utils::random_shuffle(set.begin(), set.end());
 
 	return set;
+}
+
+sets::all_t sets::get_all(const size_t set_size) {
+	return {
+		{"sorted",   sets::sorted(set_size)},
+		{"random",   sets::random(set_size)},
+		{"inverted", sets::inverted(set_size)},
+	};
 }
 
 // This is experimental and designed to kill quicksort. It doesn't work,

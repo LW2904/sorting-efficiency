@@ -30,7 +30,6 @@ including unit tests for each of the above.
 ## Usage
 
 ```
-$ benchmark -h
 Usage: benchmark [options]
 Options:
   -h, --help        Display this information and exit.
@@ -40,6 +39,13 @@ Options:
                     (default: 128)
   -t, --step-type   Specifies the step type to use, one of 'linear' or
                     'quadratic'. (default: linear)
+  -a, --average     Repeat the benchmarking a given number of times and output
+                    the average results of all runs. (default: 0)
+  -m, --median      Like -a, except it outputs the median. (default: 0)
+  -r, --randomize   Randomize the order in which the different combinations
+                    between sorters and sets are benchmarked. (default: false)
+  -i, --run-info    Output an additional file with meta information about the
+                    current run. (default: false)
 ```
 
 The default (and _only_) behaviour is to generate files named `${sorter name}_${set name}` in the `./out/` directory (you can change this with the `-o` option).

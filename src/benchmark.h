@@ -43,9 +43,21 @@ namespace benchmark {
 		step_type_t step_type
 	);
 
-	void write(const std::string &sub_path, const char *algo_name,
-		const char *set_name, const timings_t &timings
+	void write(const std::string &sub_path, const std::string &algo_name,
+		const std::string &set_name, const timings_t &timings
 	);
+
+	class timings_group : public std::vector<benchmark::timings_t> {
+		using rows_t = std::map<benchmark::timings_t::key_type, std::vector<
+			benchmark::timings_t::mapped_type>
+		>;
+
+		rows_t get_rows();
+
+	public:
+		timings_t average();
+		timings_t median();
+	};
 }
 
 #include "benchmark.hpp"

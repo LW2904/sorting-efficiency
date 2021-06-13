@@ -10,6 +10,8 @@ class config {
 
 	void parse(char *argv[]);
 
+	void verify();
+
 public:
 	std::string output = "./out";
 
@@ -19,7 +21,16 @@ public:
 
 	benchmark::step_type_t step_type = benchmark::linear;
 
+	size_t average = 0;
+
+	size_t median = 0;
+
+	bool randomize_tasks = false;
+
+	bool write_run_info = false;
+
 	bool should_exit = false;
 
+	config();
 	explicit config(char *argv[]);
 };

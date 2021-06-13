@@ -1,6 +1,7 @@
-#include "sorters.h"
-
-#include "sets.h"
+#include <iterator>	// distance, begin, end, next
+#include <algorithm>	// min_element, iter_swap, upper_bound, rotate, partition,
+// inplace_merge, make_heap, sort_heap, is_heap, is_sorted
+#include <functional>	// less, function
 
 template<class I, class P>
 void sorters::insertion(I first, I last, P cmp) {
@@ -55,4 +56,14 @@ void sorters::merge(BI first, BI last, P cmp) {
 	merge(middle, last, cmp);
 
 	std::inplace_merge(first, middle, last, cmp);
+}
+
+template<class I>
+sorters::all_t<I> sorters::get_all() {
+	return {
+		{"quick",     sorters::quick<I>},
+		{"heap",      sorters::heap<I>},
+		{"merge",     sorters::merge<I>},
+		{"insertion", sorters::insertion<I>},
+	};
 }

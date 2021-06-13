@@ -1,9 +1,8 @@
 #pragma once
 
-#include <iterator>	// distance, begin, end, next
-#include <algorithm>	// min_element, iter_swap, upper_bound, rotate, partition,
-			// inplace_merge, make_heap, sort_heap, is_heap, is_sorted
-#include <functional>	// less, function
+#include "utils.h"
+
+#include <functional>	// function
 
 namespace sorters {
 	template<class I, class P = std::less<>>
@@ -35,6 +34,14 @@ namespace sorters {
 	// Always O(n log n)
 	template<class BI, class P = std::less<>>
 	void merge(BI first, BI last, P cmp = P{});
+
+	template<class I>
+	using annotated_sorter_t = utils::annotated_t<sorters::sorter_t<I>>;
+	template<class I>
+	using all_t = std::vector<annotated_sorter_t<I>>;
+
+	template<class I>
+	all_t<I> get_all();
 }
 
 #include "sorters.hpp"

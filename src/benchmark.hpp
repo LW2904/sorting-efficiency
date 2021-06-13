@@ -1,7 +1,5 @@
 #pragma once
 
-#include "benchmark.h"
-
 constexpr auto benchmark::get_subset_size_factory(const size_t set_size,
 	const size_t total_chunks, const step_type_t step_type
 ) {
