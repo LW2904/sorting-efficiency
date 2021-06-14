@@ -115,18 +115,18 @@ TEST_CASE("subset size generator works as expected", "[step type]") {
 	}
 }
 
-TEST_CASE("benchmark groups work as expected") {
-	benchmark::timings_group group;
+TEST_CASE("benchmark result groups work as expected") {
+	benchmark::result_groups group;
 
 	group.push_back({{1, 5}, {2, 8}, {3, 10}});
 	group.push_back({{1, 6}, {2, 6}, {3, 8}});
 	group.push_back({{1, 4}, {2, 7}, {3, 12}});
 
-	benchmark::timings_t t_avg = {{1, 5}, {2, 7}, {3, 10}};
+	benchmark::result_t t_avg = {{1, 5}, {2, 7}, {3, 10}};
 	REQUIRE(group.average() == t_avg);
 
 	group.push_back({{1, 3}, {2, 10}, {3, 11}});
 
-	benchmark::timings_t t_med = {{1, 4.5}, {2, 7.5}, {3, 10.5}};
+	benchmark::result_t t_med = {{1, 4.5}, {2, 7.5}, {3, 10.5}};
 	REQUIRE(group.median() == t_med);
 }

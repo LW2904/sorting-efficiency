@@ -19,7 +19,7 @@ struct task {
 	sorters::annotated_sorter_t<sets::iterator_t> sorter;
 	sets::annotated_set_t set;
 
-	benchmark::timings_t result;
+	benchmark::result_t result;
 
 	task(sorters::annotated_sorter_t<sets::iterator_t> sorter,
 		sets::annotated_set_t set
@@ -83,19 +83,19 @@ int main(int, char *argv[]) {
 
 	// Consolidate task results into a ready-to-output format
 
-	std::vector<std::tuple<utils::annotate_t, utils::annotate_t, benchmark::timings_t>>
+	std::vector<std::tuple<utils::annotate_t, utils::annotate_t, benchmark::result_t>>
 	        results;
 
 	for (const auto &sorter : raw_results) {
 		for (const auto &set : sorter.second) {
-			benchmark::timings_group timings;
+			benchmark::result_group result;
 
 			for (const auto &task : set.second) {
-				timings.push_back(task.result);
+				result.push_back(task.result);
 			}
 
-			if (timings.empty()) {
-				printf("error: no timings for sorter %s with"
+			if (result.empty()) {
+				printf("error: no result for sorter %s with"
 				       "set %s\n", sorter.first.c_str(),
 				       set.first.c_str());
 
@@ -103,9 +103,9 @@ int main(int, char *argv[]) {
 			}
 
 			results.emplace_back(sorter.first, set.first, (
-				timings.size() == 1 ? timings.at(0) : (
-					cfg.average ? timings.average() :
-					cfg.median ? timings.median() : timings.at(1)
+				result.size() == 1 ? result.at(0) : (
+					cfg.average ? result.average() :
+					cfg.median ? result.median() : result.at(1)
 				)
 			));
 		}

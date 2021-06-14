@@ -16,7 +16,7 @@
 namespace benchmark {
 	using algorithm_t = sorters::sorter_t<sets::iterator_t>;
 
-	using timings_t = std::map<size_t, experiment::time_t>;
+	using result_t = std::map<size_t, experiment::time_t>;
 
 	enum step_type_t {
 		linear, quadratic
@@ -39,24 +39,24 @@ namespace benchmark {
 		step_type_t step_type
 	);
 
-	timings_t run(algorithm_t algorithm, sets::set_t set, size_t total_chunks,
+	result_t run(algorithm_t algorithm, sets::set_t set, size_t total_chunks,
 		step_type_t step_type
 	);
 
 	void write(const std::string &sub_path, const std::string &algo_name,
-		const std::string &set_name, const timings_t &timings
+		const std::string &set_name, const result_t &result
 	);
 
-	class timings_group : public std::vector<benchmark::timings_t> {
-		using rows_t = std::map<benchmark::timings_t::key_type, std::vector<
-			benchmark::timings_t::mapped_type>
+	class result_group : public std::vector<benchmark::result_t> {
+		using rows_t = std::map<benchmark::result_t::key_type, std::vector<
+			benchmark::result_t::mapped_type>
 		>;
 
 		rows_t get_rows();
 
 	public:
-		timings_t average();
-		timings_t median();
+		result_t average();
+		result_t median();
 	};
 }
 
