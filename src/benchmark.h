@@ -18,7 +18,7 @@ namespace benchmark {
 
 	using result_t = std::map<size_t, experiment::time_t>;
 
-	enum step_type_t {
+	enum step_type {
 		linear, quadratic
 	};
 
@@ -36,11 +36,11 @@ namespace benchmark {
 	// function in the mathematical sense, the first subset size is f(1).
 	// Values of f are always positive and always <= set_size.
 	constexpr auto get_subset_size_factory(size_t set_size, size_t total_chunks,
-		step_type_t step_type
+		step_type step_type
 	);
 
 	result_t run(algorithm_t algorithm, sets::set_t set, size_t total_chunks,
-		step_type_t step_type
+		step_type step_type
 	);
 
 	void write(const std::string &sub_path, const std::string &algo_name,

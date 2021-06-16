@@ -19,7 +19,7 @@ public:
 
 	size_t total_chunks = 128;
 
-	benchmark::step_type_t step_type = benchmark::linear;
+	benchmark::step_type step_type = benchmark::linear;
 
 	size_t average = 0;
 

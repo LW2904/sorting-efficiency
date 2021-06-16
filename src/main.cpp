@@ -25,7 +25,7 @@ struct task {
 		sets::annotated_set_t set
 	) : sorter(std::move(sorter)), set(std::move(set)) {};
 
-	void run(const size_t total_chunks, const benchmark::step_type_t step_type) {
+	void run(const size_t total_chunks, const benchmark::step_type step_type) {
 		this->result = benchmark::run(sorter.second, set.second,
 			total_chunks, step_type);
 	}

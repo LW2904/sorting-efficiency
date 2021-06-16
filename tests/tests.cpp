@@ -80,7 +80,7 @@ TEST_CASE("subset size generator works as expected", "[step type]") {
 	REQUIRE(benchmark::detail::pow2(2, 1) == 2);
 	REQUIRE(benchmark::detail::pow2(2, 2) == 4);
 
-	const auto small_set_case = [](benchmark::step_type_t step_type) {
+	const auto small_set_case = [](benchmark::step_type step_type) {
 		const auto get_subset_size = benchmark::get_subset_size_factory(
 			8, 16, step_type);
 

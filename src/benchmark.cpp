@@ -1,7 +1,7 @@
 #include "benchmark.h"
 
 benchmark::result_t benchmark::run(algorithm_t algorithm, sets::set_t set,
-	size_t total_chunks, step_type_t step_type
+	size_t total_chunks, step_type step_type
 ) {
 	result_t result;
 

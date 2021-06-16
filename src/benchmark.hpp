@@ -1,7 +1,7 @@
 #pragma once
 
 constexpr auto benchmark::get_subset_size_factory(const size_t set_size,
-	const size_t total_chunks, const step_type_t step_type
+	const size_t total_chunks, const step_type step_type
 ) {
 	const auto power = step_type == linear || set_size <= total_chunks ? 1 : 2;
 
