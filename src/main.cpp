@@ -1,138 +1,80 @@
-#include "sets.h"
-#include "utils.h"
 #include "config.h"
-#include "sorters.h"
-#include "benchmark.h"
+#include "utils/utils.h"
+#include "probands/sets.h"
+#include "probands/sorters.h"
 
-#include <map>		// map
-#include <tuple>	// tuple, get
-#include <cstdio>	// printf
-#include <utility>
+#include <string>	// string
+#include <cstdlib>	// EXIT_*
 
-enum status: int {
-	SUCCESS = 0,
-	INVALID_CONFIG = 1,
-	INVALID_STATE = 2,
-};
+// Do this instead of set_name + '_' + sorter_name to avoid unnecessary
+// allocations during concenation.
+std::string get_result_path(const std::string &set_name, const std::string &sorter_name) {
+	auto path = std::string{set_name};
+	path += '_';
+	path += sorter_name;
 
-struct task {
-	sorters::annotated_sorter_t<sets::iterator_t> sorter;
-	sets::annotated_set_t set;
-
-	benchmark::result_t result;
-
-	task(sorters::annotated_sorter_t<sets::iterator_t> sorter,
-		sets::annotated_set_t set
-	) : sorter(std::move(sorter)), set(std::move(set)) {};
-
-	void run(const size_t total_chunks, const benchmark::step_type step_type) {
-		this->result = benchmark::run(sorter.second, set.second,
-			total_chunks, step_type);
-	}
-};
-
-auto get_tasks(const sorters::all_t<sets::iterator_t> &sorters,
-	const sets::all_t &sets, const size_t runs, const bool randomize
-) {
-	std::vector<task> tasks;
-
-	for (const auto &sorter : sorters) {
-		for (const auto &set : sets) {
-			for (size_t i = 0; i < runs; i++) {
-				tasks.emplace_back(sorter, set);
-			}
-		}
-	}
-
-	if (randomize) {
-		utils::random_shuffle(tasks.begin(), tasks.end());
-	}
-
-	return tasks;
+	return path;
 }
 
 int main(int, char *argv[]) {
-	config cfg{argv};
+	const config config{argv};
 
-	if (cfg.should_exit) {
-		return status::INVALID_CONFIG;
-	}
-
-	// Get sorters and sets
-
-	const auto sorters = sorters::get_all<sets::iterator_t>();
-	const auto sets = sets::get_all(cfg.sample_size);
-
-	// Generate tasks with the available sorters/sets and the given config
-
-	const size_t runs = std::max(std::max(cfg.average, cfg.median),
-		static_cast<size_t>(1));
-	auto tasks = get_tasks(sorters, sets, runs, cfg.randomize_tasks);
-
-	// Run the tasks and group them by sorter and set (the order of tasks
-	// is arbitrary)
-
-	std::map<utils::annotate_t, std::map<utils::annotate_t, std::vector<task>>>
-		raw_results;
-
-	for (auto &task : tasks) {
-		task.run(cfg.total_chunks, cfg.step_type);
-
-		raw_results[task.sorter.first][task.set.first].push_back(task);
-	}
-
-	// Consolidate task results into a ready-to-output format
-
-	std::vector<std::tuple<utils::annotate_t, utils::annotate_t, benchmark::result_t>>
-	        results;
-
-	for (const auto &sorter : raw_results) {
-		for (const auto &set : sorter.second) {
-			benchmark::result_group result;
-
-			for (const auto &task : set.second) {
-				result.push_back(task.result);
-			}
-
-			if (result.empty()) {
-				printf("error: no result for sorter %s with"
-				       "set %s\n", sorter.first.c_str(),
-				       set.first.c_str());
-
-				return status::INVALID_STATE;
-			}
-
-			results.emplace_back(sorter.first, set.first, (
-				result.size() == 1 ? result.at(0) : (
-					cfg.average ? result.average() :
-					cfg.median ? result.median() : result.at(1)
-				)
-			));
-		}
-	}
-
-	// Output the consolidated results
-
-	for (const auto &result : results) {
-		benchmark::write(cfg.output, std::get<0>(result),
-		        std::get<1>(result), std::get<2>(result));
-	}
-
-	const auto write_run_info = [&]() {
-		std::filesystem::path file_path;
-		file_path += cfg.output + "/info";
-		std::ofstream ostrm(file_path);
-
-		ostrm << "tasks:\n";
-
-		for (const auto &task : tasks) {
-			ostrm << "\t" << task.sorter.first << " with " << task.set.first << "\n";
-		}
+	// Get all sets and assign them a name
+	const auto sets = std::map<std::string, sets::set_t>{
+		{"sorted", sets::sorted(config.sample_size)},
+		{"random", sets::random(config.sample_size)},
+		{"inverted", sets::inverted(config.sample_size)},
 	};
 
-	if (cfg.write_run_info) {
-		write_run_info();
+	// Get all sorters and assign them a name
+	const auto sorters = std::map<std::string, benchmark::algorithm_t>{
+		{"insertion", sorters::insertion<sets::iterator_t>},
+		{"quick", sorters::quick<sets::iterator_t>},
+		{"heap", sorters::heap<sets::iterator_t>},
+		{"merge", sorters::merge<sets::iterator_t>},
+	};
+
+	// Generate a list of "tasks", i.e. benchmark runs, to be run
+	std::multimap<std::string, benchmark> annotated_tasks;
+
+	for (const auto &[set_name, set] : sets) {
+		for (const auto &[sorter_name, sorter] : sorters) {
+			const std::string path = get_result_path(set_name, sorter_name);
+			const benchmark benchmark{set, sorter, config.step_type,
+				config.total_chunks};
+
+			for (size_t i = 0; i < config.runs; i++) {
+				annotated_tasks.insert({path, benchmark});
+			}
+		}
 	}
 
-	return status::SUCCESS;
+	// This is the reason that everything needs to be divided into tasks
+	// so early, their order can now be randomized
+	if (config.randomize_execution) {
+		utils::random_shuffle(annotated_tasks.begin(), annotated_tasks.end());
+	}
+
+	// Run the tasks and undo any (potential) randomization by grouping them
+	// by their key
+	std::map<std::string, benchmark::result_group> annotated_result_groups;
+
+	for (const auto &[path, benchmark] : annotated_tasks) {
+		const auto result = benchmark.run();
+
+		if (annotated_result_groups.count(path) == 0) {
+			annotated_result_groups.insert({
+				path, benchmark::result_group{std::vector<benchmark::result>{result}}
+			});
+		} else {
+			annotated_result_groups[path].push_back(result);
+		}
+	}
+
+	// Reduce the results to a single one per key and output them
+	for (const auto &[path, result_group] : annotated_result_groups) {
+		result_group.reduce(config.reduction_type).write(path);
+	}
+
+	return EXIT_SUCCESS;
 }
