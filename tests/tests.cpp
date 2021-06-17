@@ -116,7 +116,7 @@ TEST_CASE("subset size generator works as expected", "[step type]") {
 }
 
 TEST_CASE("benchmark result groups work as expected") {
-	benchmark::result_groups group;
+	benchmark::result_group group;
 
 	group.push_back({{1, 5}, {2, 8}, {3, 10}});
 	group.push_back({{1, 6}, {2, 6}, {3, 8}});
