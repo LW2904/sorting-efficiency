@@ -1,70 +1,58 @@
 #include "benchmark.h"
+#include "utils/experiment.h"
 
-benchmark::result_t benchmark::run(algorithm_t algorithm, sets::set_t set,
-	size_t total_chunks, step_type step_type
-) {
-	result_t result;
+#include <fstream>
+#include <filesystem>
 
-	const auto get_subset_size = get_subset_size_factory(set.size(),
-		total_chunks, step_type);
+ptrdiff_t benchmark::get_chunk_length(size_t chunk_index) const {
+	return static_cast<ptrdiff_t>(
+		this->step_type == benchmark::step_type_t::linear ? (
+			this->linear_constant
+		) : this->step_type == benchmark::step_type_t::quadratic ? (
+			this->quadratic_constant
+		) : (0) * chunk_index
+	);
+}
 
-	for (size_t i = 1; i <= total_chunks; i++) {
-		auto subset_size = (std::ptrdiff_t) get_subset_size(i);
+benchmark::result benchmark::run() const {
+	benchmark::result result;
 
-		auto subset = sets::set_t(set.begin(), set.begin() + subset_size);
+	for (size_t i = 0; i < this->total_chunks; i++) {
+		const auto length = this->get_chunk_length(i);
+
+		auto subset = sets::set_t{this->set.begin(),
+			this->set.begin() + length};
 		const auto time = experiment([&]() {
-			algorithm(subset.begin(), subset.end(), std::less<>());
+			this->algorithm(subset.begin(), subset.end(), std::less<>());
 		}).run();
 
-		result.emplace(subset_size, time.count());
+		result.emplace(length, time.count());
 	}
 
 	return result;
 }
 
-// TODO: A class inheriting from std::ofstream with an overloaded <<
-// 	 operator would be significantly cleaner than this.
-// TODO: const char * should be std::string.
-void benchmark::write(const std::string &sub_path, const std::string &algo_name,
-	const std::string &set_name, const result_t &result
-) {
-	std::filesystem::path file_path;
-
-	if (!sub_path.empty())
-		file_path += sub_path;
-
-	file_path += "/";
-
-	std::filesystem::create_directories(file_path);
-
-	file_path += algo_name;
-	file_path += "_";
-	file_path += set_name;
-
-	printf("writing %s\n", file_path.c_str());
-
-	if (std::filesystem::exists(file_path)) {
-		std::filesystem::remove(file_path);
+void benchmark::result::write(const std::string &path) const {
+	if (std::filesystem::exists(path)) {
+		std::filesystem::remove(path);
 	}
 
-	std::ofstream os(file_path.c_str());
+	std::ofstream os{path};
 
-	for (const auto [n, t] : result) {
-		os << n << " " << t << "\n";
+	for (const auto &[n, time] : *this) {
+		os << n << " " << time.count() << "\n";
 	}
 }
 
-benchmark::result_group::rows_t benchmark::result_group::get_rows() {
+benchmark::result_group::rows_t benchmark::result_group::get_rows() const {
 	rows_t rows;
 
 	for (const auto &result : *this) {
 		for (const auto &[size, time] : result) {
-			const auto casted_time = static_cast<experiment::time_t>(time);
-
 			if (rows.count(size) > 0) {
-				rows[size].push_back(casted_time);
+				rows[size].push_back(time);
 			} else {
-				rows[size] = rows_t::mapped_type(1, casted_time);
+				rows[size] = rows_t::mapped_type(1, time);
 			}
 		}
 	}
@@ -72,44 +60,54 @@ benchmark::result_group::rows_t benchmark::result_group::get_rows() {
 	return rows;
 }
 
-benchmark::result_t benchmark::result_group::average() {
+benchmark::result benchmark::result_group::reduce(
+	benchmark::result_group::reduction_type reduction_type
+) const {
+	benchmark::result result;
 	const auto &rows = this->get_rows();
-	result_t final_result;
 
 	for (const auto &[size, times] : rows) {
-		experiment::time_t average_time = 0;
-
-		// Online average algorithm, since there's a chance that even int_64
-		// would overflow if the offline algorithm (sum / n) were used.
-		for (size_t i = 0; i < times.size(); i++) {
-			const auto delta = times.at(i) - average_time;
-			average_time += delta / static_cast<double>(i + 1);
-		}
-
-		final_result[size] = average_time;
+		result[size] = reduction_type == reduction_type::average ? (
+			benchmark::result_group::get_average(times)
+		) : reduction_type == reduction_type::median ? (
+			benchmark::result_group::get_median(times)
+		) : experiment::duration_t{0};
 	}
 
-	return final_result;
+	return result;
 }
 
-benchmark::result_t benchmark::result_group::median() {
-	const auto &rows = this->get_rows();
-	result_t final_result;
+experiment::duration_t benchmark::result_group::get_average(
+	benchmark::result_group::durations_t durations
+) {
+	experiment::duration_t average{0};
 
-	for (auto &[size, times] : rows) {
-		rows_t::mapped_type times_copy{times};
-
-		// A partial sort would be enough.
-		std::sort(times_copy.begin(), times_copy.end());
-
-		const auto median = times_copy.size() % 2 ? (
-			times_copy[times_copy.size() / 2]
-		) : (
-			(times_copy[times_copy.size() / 2] + times_copy[times_copy.size() / 2 - 1]) / 2
-		);
-
-		final_result[size] = median;
+	// Use online average algorithm since the offline version (sum / n) has
+	// a decent chance of overflowing
+	for (size_t i = 0; i < durations.size(); i++) {
+		average += (durations.at(i) - average) / (i + 1);
 	}
 
-	return final_result;
+	return average;
+}
+
+experiment::duration_t benchmark::result_group::get_median(
+	benchmark::result_group::durations_t durations
+) {
+	if (durations.empty()) {
+		return experiment::duration_t{0};
+	}
+
+	const auto size = static_cast<ptrdiff_t>(durations.size());
+	const auto target = durations.begin() + (size / 2);
+
+	std::nth_element(durations.begin(), target, durations.end());
+
+	if (size % 2) {
+		return *target;
+	} else {
+		// Because std::nth_element guarantees that all elements preceding
+		// target are <= *target.
+		return (*target + *std::max_element(durations.begin(), target)) / 2;
+	}
 }

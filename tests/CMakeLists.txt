@@ -3,10 +3,11 @@
 add_library(tests-main STATIC main.cpp)
 
 # This contains the actual tests and implementation files.
-add_executable(tests-run tests.cpp
-	../src/benchmark.cpp ../src/config.cpp ../src/experiment.cpp
-	../src/sets.cpp ../src/sorters.hpp)
+add_executable(tests-run sets.cpp sorters.cpp utils.cpp
+	../src/benchmark.cpp ../src/config.cpp ../src/utils/experiment.cpp
+	../src/probands/sets.cpp ../src/probands/sorters.hpp)
 
+set_target_properties(tests-run PROPERTIES CXX_STANDARD 17)
 target_compile_features(tests-run PRIVATE cxx_std_17)
 
 target_link_libraries(tests-run tests-main)

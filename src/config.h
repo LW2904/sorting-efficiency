@@ -1,7 +1,7 @@
 #pragma once
 
-#include "deps/argh.h"
 #include "benchmark.h"
+#include "deps/argh.h"
 
 class config {
 	argh::parser cmd;
@@ -9,6 +9,8 @@ class config {
 	static void print_help();
 
 	void parse(char *argv[]);
+
+	size_t average = 0, median = 0;
 
 	void verify();
 
@@ -19,13 +21,13 @@ public:
 
 	size_t total_chunks = 128;
 
-	benchmark::step_type step_type = benchmark::linear;
+	benchmark::step_type_t step_type = benchmark::step_type_t::linear;
 
-	size_t average = 0;
+	size_t runs = 1;
+	benchmark::result_group::reduction_type reduction_type =
+		benchmark::result_group::reduction_type::none;
 
-	size_t median = 0;
-
-	bool randomize_tasks = false;
+	bool randomize_execution = false;
 
 	bool write_run_info = false;
 

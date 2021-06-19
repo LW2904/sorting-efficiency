@@ -38,17 +38,25 @@ void config::parse(char *argv[]) {
 	std::string _step_type;
 	cmd({"step-type", "t"}) >> _step_type;
 
+
 	if (_step_type == "linear") {
-		step_type = benchmark::linear;
+		step_type = benchmark::step_type_t::linear;
 	} else if (_step_type == "quadratic") {
-		step_type = benchmark::quadratic;
+		step_type = benchmark::step_type_t::quadratic;
 	}
 
 	cmd({"average", "a"}) >> average;
-
 	cmd({"median", "m"}) >> median;
 
-	randomize_tasks = cmd[{"randomize", "r"}];
+	runs = std::max(average, median);
+
+	if (average) {
+		reduction_type = benchmark::result_group::reduction_type::average;
+	} else if (median) {
+		reduction_type = benchmark::result_group::reduction_type::median;
+	}
+
+	randomize_execution = cmd[{"randomize", "r"}];
 
 	write_run_info = cmd[{"run-info", "i"}];
 }
@@ -69,10 +77,10 @@ void config::verify() {
 	}
 }
 
+config::config() = default;
+
 config::config(char *argv[]) {
 	parse(argv);
 
 	verify();
 }
-
-config::config() = default;
