@@ -10,6 +10,8 @@ class config {
 
 	void parse(char *argv[]);
 
+	size_t average = 0, median = 0;
+
 	void verify();
 
 public:

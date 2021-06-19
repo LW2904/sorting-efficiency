@@ -25,3 +25,5 @@ namespace sorters {
 	template<class BI, class P = std::less<>>
 	void merge(BI first, BI last, P cmp = P{});
 }
+
+#include "sorters.hpp"

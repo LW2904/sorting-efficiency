@@ -35,7 +35,7 @@ int main(int, char *argv[]) {
 	};
 
 	// Generate a list of "tasks", i.e. benchmark runs, to be run
-	std::multimap<std::string, benchmark> annotated_tasks;
+	std::vector<std::pair<std::string, benchmark>> annotated_tasks;
 
 	for (const auto &[set_name, set] : sets) {
 		for (const auto &[sorter_name, sorter] : sorters) {
@@ -44,7 +44,7 @@ int main(int, char *argv[]) {
 				config.total_chunks};
 
 			for (size_t i = 0; i < config.runs; i++) {
-				annotated_tasks.insert({path, benchmark});
+				annotated_tasks.emplace_back(path, benchmark);
 			}
 		}
 	}
@@ -74,6 +74,8 @@ int main(int, char *argv[]) {
 	// Reduce the results to a single one per key and output them
 	for (const auto &[path, result_group] : annotated_result_groups) {
 		result_group.reduce(config.reduction_type).write(path);
+
+		printf("wrote %s\n", path.c_str());
 	}
 
 	return EXIT_SUCCESS;
