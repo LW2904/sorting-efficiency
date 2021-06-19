@@ -19,8 +19,8 @@ endif()
 message(STATUS "Compiler: ${COMPILER}")
 
 add_executable(sorting-efficiency
-	src/main.cpp src/benchmark.cpp src/config.cpp src/experiment.cpp
-	src/sets.cpp src/sorters.hpp)
+	src/main.cpp src/benchmark.cpp src/config.cpp src/utils/experiment.cpp
+	src/probands/sets.cpp src/probands/sorters.hpp)
 
 target_include_directories(sorting-efficiency PRIVATE
 	${CMAKE_CURRENT_SOURCE_DIR}/src)
