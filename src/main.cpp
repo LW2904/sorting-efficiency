@@ -34,45 +34,50 @@ int main(int, char *argv[]) {
 		{"merge", sorters::merge<sets::iterator_t>},
 	};
 
-	// Generate a list of "tasks", i.e. benchmark runs, to be run
-	std::vector<std::pair<std::string, benchmark>> annotated_tasks;
+	const auto get_tasks = [&]() {
+		std::vector<std::pair<std::string, benchmark>> tasks;
 
-	for (const auto &[set_name, set] : sets) {
-		for (const auto &[sorter_name, sorter] : sorters) {
-			const std::string path = get_result_path(set_name, sorter_name);
-			const benchmark benchmark{set, sorter, config.step_type,
-				config.total_chunks};
+		for (const auto &[set_name, set] : sets) {
+			for (const auto &[sorter_name, sorter] : sorters) {
+				const std::string path = get_result_path(set_name, sorter_name);
+				const benchmark benchmark{set, sorter, config.step_type,
+					config.total_chunks};
 
-			for (size_t i = 0; i < config.runs; i++) {
-				annotated_tasks.emplace_back(path, benchmark);
+				for (size_t i = 0; i < config.runs; i++) {
+					tasks.emplace_back(path, benchmark);
+				}
 			}
 		}
-	}
 
-	// This is the reason that everything needs to be divided into tasks
-	// so early, their order can now be randomized
+		return tasks;
+	};
+
+	// Generate a list of "tasks", i.e. benchmark runs, to be run
+	const auto tasks = get_tasks();
+
+	// Optionally randomize them
 	if (config.randomize_execution) {
-		utils::random_shuffle(annotated_tasks.begin(), annotated_tasks.end());
+		utils::random_shuffle(tasks.begin(), tasks.end());
 	}
 
-	// Run the tasks and undo any (potential) randomization by grouping them
-	// by their key
-	std::map<std::string, benchmark::result_group> annotated_result_groups;
+	// Run them tasks and undo any (potential) randomization by grouping their
+	// results by their key
+	std::map<std::string, benchmark::result_group> result_groups;
 
-	for (const auto &[path, benchmark] : annotated_tasks) {
+	for (const auto &[path, benchmark] : tasks) {
 		const auto result = benchmark.run();
 
-		if (annotated_result_groups.count(path) == 0) {
-			annotated_result_groups.insert({
+		if (result_groups.count(path) == 0) {
+			result_groups.insert({
 				path, benchmark::result_group{std::vector<benchmark::result>{result}}
 			});
 		} else {
-			annotated_result_groups[path].push_back(result);
+			result_groups[path].push_back(result);
 		}
 	}
 
 	// Reduce the results to a single one per key and output them
-	for (auto &[path, result_group] : annotated_result_groups) {
+	for (auto &[path, result_group] : result_groups) {
 		const auto final_path = config.output + "/" + path;
 
 		result_group.reduce(config.reduction_type).write(final_path);
