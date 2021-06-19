@@ -72,8 +72,10 @@ int main(int, char *argv[]) {
 	}
 
 	// Reduce the results to a single one per key and output them
-	for (const auto &[path, result_group] : annotated_result_groups) {
-		result_group.reduce(config.reduction_type).write(path);
+	for (auto &[path, result_group] : annotated_result_groups) {
+		const auto final_path = config.output + "/" + path;
+
+		result_group.reduce(config.reduction_type).write(final_path);
 
 		printf("wrote %s\n", path.c_str());
 	}
