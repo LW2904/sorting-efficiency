@@ -34,7 +34,7 @@ int main(int, char *argv[]) {
 		{"merge", sorters::merge<sets::iterator_t>},
 	};
 
-	const auto get_tasks = [&]() {
+	auto get_tasks = [&]() {
 		std::vector<std::pair<std::string, benchmark>> tasks;
 
 		for (const auto &[set_name, set] : sets) {
@@ -53,7 +53,7 @@ int main(int, char *argv[]) {
 	};
 
 	// Generate a list of "tasks", i.e. benchmark runs, to be run
-	const auto tasks = get_tasks();
+	auto tasks = get_tasks();
 
 	// Optionally randomize them
 	if (config.randomize_execution) {

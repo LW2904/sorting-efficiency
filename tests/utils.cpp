@@ -18,7 +18,7 @@ TEST_CASE("experiment times with reasonable accuracy", "[experiment]") {
 }
 
 TEST_CASE("random shuffle shuffles randomly", "[shuffle]") {
-	std::vector<int> original{128};
+	auto original = std::vector<int>(128);
 	std::iota(original.begin(), original.end(), 4);
 
 	auto copy = original;
