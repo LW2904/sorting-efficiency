@@ -29,8 +29,6 @@ public:
 
 	bool randomize_execution = false;
 
-	bool write_run_info = false;
-
 	bool should_exit = false;
 
 	config();

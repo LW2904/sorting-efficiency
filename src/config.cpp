@@ -16,8 +16,6 @@ void config::print_help() {
 		"  -m, --median      Like -a, except it outputs the median. (default: 0)\n"
 		"  -r, --randomize   Randomize the order in which the different combinations\n"
 		"                    between sorters and sets are benchmarked. (default: false)\n"
-		"  -i, --run-info    Output an additional file with meta information about the\n"
-		"                    current run. (default: false)\n"
 	);
 }
 
@@ -30,35 +28,46 @@ void config::parse(char *argv[]) {
 	}
 
 	cmd({"output", "o"}) >> output;
+	printf("output: %s\n", output.c_str());
 
 	cmd({"size", "s"}) >> sample_size;
+	printf("size: %zu\n", sample_size);
 
 	cmd({"chunks", "c"}) >> total_chunks;
+	printf("chunks: %zu\n", total_chunks);
 
 	std::string _step_type;
 	cmd({"step-type", "t"}) >> _step_type;
 
-
+	printf("step type: ");
 	if (_step_type == "linear") {
 		step_type = benchmark::step_type_t::linear;
+		printf("linear\n");
 	} else if (_step_type == "quadratic") {
 		step_type = benchmark::step_type_t::quadratic;
+		printf("quadratic\n");
 	}
+
 
 	cmd({"average", "a"}) >> average;
 	cmd({"median", "m"}) >> median;
 
 	runs = std::max(average, median);
+	printf("runs: %zu\n", runs);
 
+	printf("reduction type: ");
 	if (average) {
 		reduction_type = benchmark::result_group::reduction_type::average;
+		printf("average\n");
 	} else if (median) {
 		reduction_type = benchmark::result_group::reduction_type::median;
+		printf("median\n");
 	}
 
 	randomize_execution = cmd[{"randomize", "r"}];
+	printf("randomize: %s\n", randomize_execution ? "true" : "false");
 
-	write_run_info = cmd[{"run-info", "i"}];
+	putchar('\n');
 }
 
 void config::verify() {
