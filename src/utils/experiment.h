@@ -7,11 +7,13 @@
 class experiment {
 	std::function<void()> function;
 
+	using clock_t = std::chrono::steady_clock;
+
 public:
-	using duration_t = std::chrono::steady_clock::duration;
+	using duration_t = clock_t::duration;
 
 	explicit experiment(std::function<void()> function)
 		: function(std::move(function)) {};
 
-	duration_t run() const;
+	[[nodiscard]] duration_t run() const;
 };
