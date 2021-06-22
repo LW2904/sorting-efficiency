@@ -44,8 +44,6 @@ Options:
   -m, --median      Like -a, except it outputs the median. (default: 0)
   -r, --randomize   Randomize the order in which the different combinations
                     between sorters and sets are benchmarked. (default: false)
-  -i, --run-info    Output an additional file with meta information about the
-                    current run. (default: false)
 ```
 
 The default (and _only_) behaviour is to generate files named `${sorter name}_${set name}` in the `./out/` directory (you can change this with the `-o` option).
